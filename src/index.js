@@ -1,6 +1,6 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import './index.css'
+import { createRoot } from "react-dom/client";
+import { App } from "./App";
 
-const app = createApp(App);
-app.mount("#app");
+const container = document.getElementById("app");
+const root = createRoot(container)
+root.render(<App />);
