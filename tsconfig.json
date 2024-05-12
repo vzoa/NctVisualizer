@@ -11,5 +11,5 @@
       "isolatedModules": true
     },
     "display": "Recommended",
-    "$schema": "https://json.schemastore.org/tsconfig"
+    "$schema": "https://json.schemastore.org/tsconfig",
   }
