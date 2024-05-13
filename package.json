@@ -19,6 +19,11 @@
     "vite-plugin-solid": "^2.10.2"
   },
   "dependencies": {
-    "solid-js": "^1.8.17"
+    "@kobalte/core": "^0.13.1",
+    "@kobalte/tailwindcss": "^0.9.0",
+    "lucide-solid": "^0.378.0",
+    "mapbox-gl": "^3.3.0",
+    "solid-js": "^1.8.17",
+    "solid-map-gl": "^1.11.2"
   }
 }
