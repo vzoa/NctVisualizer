@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {},
   },
-  plugins: [KobalteTailwindPlugin],
+  plugins: [KobalteTailwindPlugin, require("tailwindcss-animate")],
 };
 
 export default config;

@@ -1,8 +1,9 @@
 import { Component, createSignal } from "solid-js";
-import MapGL, { Layer, Source, Viewport } from "solid-map-gl";
-import StyledCheckbox from "./StyledCheckbox";
-
+import MapGL, { Viewport } from "solid-map-gl";
+import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { DEFAULT_MAP_STYLE, MapStyleSelector } from "./MapStyleSelector";
+
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -13,7 +14,7 @@ const App: Component = () => {
   const [checked, setChecked] = createSignal(false);
 
   const [mapStyle, setMapStyle] = createSignal(
-    "mapbox://styles/mapbox/light-v11"
+    DEFAULT_MAP_STYLE
   );
 
   return (
@@ -21,35 +22,32 @@ const App: Component = () => {
       <div class="flex flex-col bg-slate-900 p-4 space-y-4">
         <h1 class="text-white text-2xl">NCT Visualizer</h1>
         <div>
-          <h2 class="text-white text-xl">Style</h2>
-          <select onChange={(e) => setMapStyle(e.target.value)}>
-            <option value="mapbox://styles/mapbox/empty-v9">Blank</option>
-            <option value="mapbox://styles/mapbox/light-v11">
-              World Light
-            </option>
-          </select>
+          <h2 class="text-white text-xl mb-1">Style</h2>
+          <div class="flex flex-col space-y-1">
+            <MapStyleSelector style={mapStyle} setStyle={setMapStyle}/>
+          </div>
         </div>
         <div>
           <h2 class="text-white text-xl mb-2">Base Map</h2>
           <div class="flex flex-col space-y-1">
-            <StyledCheckbox
+            <Checkbox
               label="LO W-S"
-              checked={checked}
+              checked={checked()}
               onChange={setChecked}
             />
-            <StyledCheckbox
+            <Checkbox
               label="HI W-S"
-              checked={checked}
+              checked={checked()}
               onChange={setChecked}
             />
-            <StyledCheckbox
+            <Checkbox
               label="LO E-N"
-              checked={checked}
+              checked={checked()}
               onChange={setChecked}
             />
-            <StyledCheckbox
+            <Checkbox
               label="HI E-N"
-              checked={checked}
+              checked={checked()}
               onChange={setChecked}
             />
           </div>
@@ -63,7 +61,7 @@ const App: Component = () => {
           options={{
             accessToken:
               "pk.eyJ1Ijoia2VuZ3JlaW0iLCJhIjoiY2x3MW15aGtzMGRuNzJrbHIybWNuM3BibyJ9.aMwzzc4Q0-bPHtWI-_MEQg",
-            style: mapStyle(),
+            style: mapStyle().value,
           }}
           viewport={viewport()}
           onViewportChange={(evt: Viewport) => setViewport(evt)}
