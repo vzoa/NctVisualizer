@@ -6,7 +6,8 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "buildtrace": "set \"VITE_CJS_TRACE=true\" && vite build"
   },
   "license": "MIT",
   "devDependencies": {
@@ -26,6 +27,7 @@
     "clsx": "^2.1.1",
     "lucide-solid": "^0.378.0",
     "mapbox-gl": "^3.3.0",
+    "prettier": "^3.2.5",
     "solid-js": "^1.8.17",
     "solid-map-gl": "^1.11.2",
     "tailwind-merge": "^2.3.0"
