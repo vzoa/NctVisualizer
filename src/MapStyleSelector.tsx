@@ -1,27 +1,8 @@
 import { Select } from "@kobalte/core/select";
 import { Accessor, Component, Setter } from "solid-js";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/Select";
-
-interface MapStyle {
-  value: string;
-  label: string;
-  disabled: boolean;
-}
-
-export const DEFAULT_MAP_STYLE: MapStyle = {
-  value: "mapbox://styles/mapbox/empty-v9",
-  label: "Empty",
-  disabled: false,
-};
-
-const MAP_STYLES: MapStyle[] = [
-  DEFAULT_MAP_STYLE,
-  {
-    value: "mapbox://styles/mapbox/light-v11",
-    label: "World Light",
-    disabled: false,
-  },
-];
+import { MAP_STYLES } from "./config";
+import { MapStyle } from "./types";
 
 interface MapStyleSelectorProps {
   style: Accessor<MapStyle>;
