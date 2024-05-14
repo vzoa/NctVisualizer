@@ -13,6 +13,11 @@ export const MAP_STYLES: MapStyle[] = [
     label: "World Light",
     disabled: false,
   },
+  {
+    value: "mapbox://styles/kengreim/clw6l16rw002o01q1cq9h43ft",
+    label: "Satellite Low Opacity",
+    disabled: false,
+  },
 ];
 
 export const NCT_MAPS: NctMap[] = [

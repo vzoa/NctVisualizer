@@ -60,7 +60,7 @@ const App: Component = () => {
           viewport={viewport()}
           onViewportChange={(evt: Viewport) => setViewport(evt)}
           class="h-full w-full"
-          debug={true}
+          debug={import.meta.env.DEV}
         >
           <For each={NctMaps}>
             {(map, i) => (
