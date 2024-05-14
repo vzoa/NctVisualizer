@@ -1,24 +1,24 @@
-import type { Component, ValidComponent } from "solid-js"
-import { splitProps } from "solid-js"
+import type { Component, ValidComponent } from "solid-js";
+import { splitProps } from "solid-js";
 
-import { PolymorphicProps } from "@kobalte/core/polymorphic"
+import { PolymorphicProps } from "@kobalte/core/polymorphic";
 import {
   SelectContentProps,
   SelectItemProps,
   Select as SelectPrimitive,
-  SelectTriggerProps
-} from "@kobalte/core/select"
+  SelectTriggerProps,
+} from "@kobalte/core/select";
 
-import { cn } from "../lib/utils"
+import { cn } from "../lib/utils";
 
-const Select = SelectPrimitive
+const Select = SelectPrimitive;
 
-const SelectValue = SelectPrimitive.Value
+const SelectValue = SelectPrimitive.Value;
 
-type TriggerProps<T extends ValidComponent = "button"> = PolymorphicProps<T, SelectTriggerProps>
+type TriggerProps<T extends ValidComponent = "button"> = PolymorphicProps<T, SelectTriggerProps>;
 
 const SelectTrigger: Component<TriggerProps> = (props) => {
-  const [, rest] = splitProps(props, ["class", "children"])
+  const [, rest] = splitProps(props, ["class", "children"]);
   return (
     <SelectPrimitive.Trigger
       class={cn(
@@ -41,40 +41,40 @@ const SelectTrigger: Component<TriggerProps> = (props) => {
           stroke-linejoin="round"
           class="size-4 opacity-50"
         >
-          <path d="M6 9l6 6l6 -6"/>
+          <path d="M6 9l6 6l6 -6" />
         </svg>
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
-  )
-}
+  );
+};
 
-type ContentProps<T extends ValidComponent = "div"> = PolymorphicProps<T, SelectContentProps>
+type ContentProps<T extends ValidComponent = "div"> = PolymorphicProps<T, SelectContentProps>;
 
 const SelectContent: Component<ContentProps> = (props) => {
-  const [, rest] = splitProps(props, ["class"])
+  const [, rest] = splitProps(props, ["class"]);
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         class={cn(
-          "relative z-50 min-w-32 overflow-hidden rounded-md border bg-slate-800 text-gray-300 shadow-xl animate-in fade-in-80",
+          "relative z-50 min-w-32 overflow-hidden rounded-md border bg-slate-800 text-gray-300 shadow-xl",
           props.class
         )}
         {...rest}
       >
-        <SelectPrimitive.Listbox class="m-0 p-1"/>
+        <SelectPrimitive.Listbox class="m-0 p-1" />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
-  )
-}
+  );
+};
 
-type ItemProps<T extends ValidComponent = "li"> = PolymorphicProps<T, SelectItemProps>
+type ItemProps<T extends ValidComponent = "li"> = PolymorphicProps<T, SelectItemProps>;
 
 const SelectItem: Component<ItemProps> = (props) => {
-  const [, rest] = splitProps(props, ["class", "children"])
+  const [, rest] = splitProps(props, ["class", "children"]);
   return (
     <SelectPrimitive.Item
       class={cn(
-        "relative mt-0 flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-slate-700 focus:text-gray-100 ui-disabled:pointer-events-none ui-disabled:opacity-50",
+        "relative mt-0 flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-slate-700 focus:text-gray-100 disabled:pointer-events-none disabled:opacity-50",
         props.class
       )}
       {...rest}
@@ -91,14 +91,14 @@ const SelectItem: Component<ItemProps> = (props) => {
             stroke-linejoin="round"
             class="size-4"
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M5 12l5 5l10 -10"/>
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M5 12l5 5l10 -10" />
           </svg>
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemLabel>{props.children}</SelectPrimitive.ItemLabel>
     </SelectPrimitive.Item>
-  )
-}
+  );
+};
 
-export { Select, SelectValue, SelectTrigger, SelectContent, SelectItem }
+export { Select, SelectValue, SelectTrigger, SelectContent, SelectItem };

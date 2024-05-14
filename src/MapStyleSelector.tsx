@@ -18,6 +18,7 @@ const MapStyleSelector: Component<MapStyleSelectorProps> = (props) => {
       optionDisabled="disabled"
       value={props.style()}
       onChange={props.setStyle}
+      disallowEmptySelection={true}
       itemComponent={(props) => (
         <SelectItem item={props.item}>{props.item.rawValue.label}</SelectItem>
       )}
