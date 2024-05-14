@@ -2,10 +2,14 @@ import { Accessor, Setter } from "solid-js";
 
 interface NctMap {
   name: string;
-  getter: Accessor<boolean | undefined> | Accessor<boolean>;
-  setter: Setter<boolean | undefined> | Setter<boolean>;
   url: string;
   sourceLayer: string;
+  showDefault: boolean;
+}
+
+interface NctMapWithSignal extends NctMap {
+  getter: Accessor<boolean | undefined> | Accessor<boolean>;
+  setter: Setter<boolean | undefined> | Setter<boolean>;
 }
 
 interface MapStyle {
@@ -14,4 +18,4 @@ interface MapStyle {
   disabled: boolean;
 }
 
-export type { NctMap, MapStyle };
+export type { NctMap, NctMapWithSignal, MapStyle };
