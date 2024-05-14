@@ -3,8 +3,8 @@ import MapGL, { Layer, Source, Viewport } from "solid-map-gl";
 import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./MapStyleSelector";
-import { NctMap } from "./types";
-import { DEFAULT_MAP_STYLE } from "./config";
+import { NctMapWithSignal } from "./types";
+import { DEFAULT_MAP_STYLE, NCT_MAPS } from "./config";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -14,41 +14,17 @@ const App: Component = () => {
 
   const [mapStyle, setMapStyle] = createSignal(DEFAULT_MAP_STYLE);
 
-  const [loW, setLoW] = createSignal<boolean>(true);
-  const [hiW, setHiW] = createSignal<boolean>();
-  const [loE, setLoE] = createSignal<boolean>();
-  const [hiE, setHiE] = createSignal<boolean>();
-
-  const NctMaps: NctMap[] = [
-    {
-      name: "LO W-S",
-      getter: loW,
-      setter: setLoW,
-      url: "mapbox://kengreim.4525vady",
-      sourceLayer: "01GE9SE1H343T0ZZQ6DP787MKV-2yipi9",
-    },
-    {
-      name: "HI W-S",
-      getter: hiW,
-      setter: setHiW,
-      url: "mapbox://kengreim.06318cwy",
-      sourceLayer: "3_HI-W-536qzx",
-    },
-    {
-      name: "LO E-N",
-      getter: loE,
-      setter: setLoE,
-      url: "mapbox://kengreim.24hjuu7e",
-      sourceLayer: "2_LO-E-68fxnv",
-    },
-    {
-      name: "HI E-N",
-      getter: hiE,
-      setter: setHiE,
-      url: "mapbox://kengreim.1pttoy8k",
-      sourceLayer: "4_HI-E-ddd7d9",
-    },
-  ];
+  const NctMaps: NctMapWithSignal[] = NCT_MAPS.map((n) => {
+    const [getter, setter] = n.showDefault ? createSignal<boolean>(true) : createSignal<boolean>();
+    return {
+      name: n.name,
+      url: n.url,
+      sourceLayer: n.sourceLayer,
+      showDefault: n.showDefault,
+      getter: getter,
+      setter: setter,
+    };
+  });
 
   return (
     <div class="flex h-screen">
