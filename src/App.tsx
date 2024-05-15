@@ -3,11 +3,14 @@ import MapGL, { Layer, Source, Viewport } from "solid-map-gl";
 import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./MapStyleSelector";
-import { NctMapWithSignal } from "./types";
-import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS } from "./config";
+import { MapStyle, NctMapWithSignal } from "./types";
+import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, MAP_STYLES } from "./config";
 
 import { getGeojsonSources } from "./lib/geojson";
 import { GeojsonPolySources } from "./GeojsonPolySources";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/Select";
+import { Select } from "@kobalte/core/select";
+import { NctBasemaps } from "./NctBasemaps";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -27,6 +30,8 @@ const App: Component = () => {
       setter: setter,
     };
   });
+
+  const [rno, setRno] = createSignal("RNOS");
 
   const sources = getGeojsonSources(E_NV_POLYS);
 
@@ -52,6 +57,21 @@ const App: Component = () => {
         </div>
         <div>
           <h2 class="text-white text-xl">Sectors</h2>
+
+          <Select
+            options={["RNOS", " RNON"]}
+            value={rno()}
+            onChange={setRno}
+            disallowEmptySelection={true}
+            itemComponent={(props) => (
+              <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+            )}
+          >
+            <SelectTrigger aria-label="Map Style" class="w-[180px]">
+              <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+            </SelectTrigger>
+            <SelectContent />
+          </Select>
         </div>
       </div>
       <div class="grow">
@@ -66,26 +86,7 @@ const App: Component = () => {
           class="h-full w-full"
           debug={import.meta.env.DEV}
         >
-          <For each={nctMaps}>
-            {(map, i) => (
-              <Source
-                source={{
-                  type: "vector",
-                  url: map.url,
-                }}
-              >
-                <Show when={typeof map.getter() != "undefined"}>
-                  <Layer
-                    style={{
-                      "source-layer": map.sourceLayer,
-                      type: "line",
-                    }}
-                    visible={map.getter()}
-                  />
-                </Show>
-              </Source>
-            )}
-          </For>
+          <NctBasemaps maps={nctMaps} />
           {/*<Source*/}
           {/*  source={{*/}
           {/*    type: "geojson",*/}
