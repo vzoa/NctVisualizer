@@ -11,6 +11,7 @@ export default defineConfig({
     // devtools(),
     solidPlugin(),
   ],
+  assetsInclude: ['**/*.geojson'],
   server: {
     port: 3000,
   },
