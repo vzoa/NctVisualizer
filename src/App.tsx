@@ -4,10 +4,10 @@ import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./MapStyleSelector";
 import { NctMapWithSignal } from "./types";
-import { DEFAULT_MAP_STYLE, NCT_MAPS } from "./config";
+import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS } from "./config";
 
-import nuggetUrl from "./polys/e-nv/nugget.geojson";
-import silverUrl from "./polys/e-nv/silver.geojson";
+import { getGeojsonSources } from "./lib/geojson";
+import { GeojsonPolySources } from "./GeojsonPolySources";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -15,8 +15,10 @@ const App: Component = () => {
     zoom: 7,
   } as Viewport);
 
+  // Signal for map base style
   const [mapStyle, setMapStyle] = createSignal(DEFAULT_MAP_STYLE);
 
+  // Array of NCT base maps (LO W-S, Hi W-S, etc.) each with a signal for whether it's displayed
   const nctMaps: NctMapWithSignal[] = NCT_MAPS.map((n) => {
     const [getter, setter] = n.showDefault ? createSignal<boolean>(true) : createSignal<boolean>();
     return {
@@ -25,6 +27,8 @@ const App: Component = () => {
       setter: setter,
     };
   });
+
+  const sources = getGeojsonSources(E_NV_POLYS);
 
   return (
     <div class="flex h-screen">
@@ -82,56 +86,68 @@ const App: Component = () => {
               </Source>
             )}
           </For>
-          <Source
-            source={{
-              type: "geojson",
-              data: nuggetUrl,
+          {/*<Source*/}
+          {/*  source={{*/}
+          {/*    type: "geojson",*/}
+          {/*    data: nuggetUrl,*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <Layer*/}
+          {/*    style={{*/}
+          {/*      type: "fill",*/}
+          {/*      paint: {*/}
+          {/*        "fill-color": "hsl(300, 100%, 50%)",*/}
+          {/*        "fill-opacity": 0.2,*/}
+          {/*      },*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*  <Layer*/}
+          {/*    style={{*/}
+          {/*      type: "line",*/}
+          {/*      paint: {*/}
+          {/*        "line-color": "hsl(300, 100%, 50%)",*/}
+          {/*        "line-width": 2,*/}
+          {/*      },*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</Source>*/}
+          {/*<Source*/}
+          {/*  source={{*/}
+          {/*    type: "geojson",*/}
+          {/*    data: silverUrl,*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <Layer*/}
+          {/*    style={{*/}
+          {/*      type: "fill",*/}
+          {/*      paint: {*/}
+          {/*        "fill-color": "hsl(100, 100%, 50%)",*/}
+          {/*        "fill-opacity": 0.2,*/}
+          {/*      },*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*  <Layer*/}
+          {/*    style={{*/}
+          {/*      type: "line",*/}
+          {/*      paint: {*/}
+          {/*        "line-color": "hsl(100, 100%, 50%)",*/}
+          {/*        "line-width": 2,*/}
+          {/*      },*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</Source>*/}
+          <GeojsonPolySources sources={sources} />
+          <Layer
+            id="test"
+            style={{
+              source: "RNON_Nugget",
+              type: "line",
+              paint: {
+                "line-color": "hsl(100, 100%, 50%)",
+                "line-width": 2,
+              },
             }}
-          >
-            <Layer
-              style={{
-                type: "fill",
-                paint: {
-                  "fill-color": "hsl(300, 100%, 50%)",
-                  "fill-opacity": 0.2,
-                },
-              }}
-            />
-            <Layer
-              style={{
-                type: "line",
-                paint: {
-                  "line-color": "hsl(300, 100%, 50%)",
-                  "line-width": 2,
-                },
-              }}
-            />
-          </Source>
-          <Source
-            source={{
-              type: "geojson",
-              data: silverUrl,
-            }}
-          >
-            <Layer
-              style={{
-                type: "fill",
-                paint: {
-                  "fill-color": "hsl(100, 100%, 50%)",
-                  "fill-opacity": 0.2,
-                },
-              }}
-            />
-            <Layer
-              style={{
-                type: "line",
-                paint: {
-                  "line-color": "hsl(100, 100%, 50%)",
-                  "line-width": 2,
-                },
-              }}
-            />
-          </Source>
+          />
         </MapGL>
       </div>
     </div>

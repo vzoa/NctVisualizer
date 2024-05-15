@@ -1,12 +1,14 @@
-import { MapStyle, NctMap } from "./types";
+import { MapStyle, NctMap, AreaPolys } from "./types";
+import nuggetUrl from "./polys/e-nv/nugget.geojson";
+import silverUrl from "./polys/e-nv/silver.geojson";
 
-export const DEFAULT_MAP_STYLE: MapStyle = {
+const DEFAULT_MAP_STYLE: MapStyle = {
   value: "mapbox://styles/mapbox/empty-v9",
   label: "Empty",
   disabled: false,
 };
 
-export const MAP_STYLES: MapStyle[] = [
+const MAP_STYLES: MapStyle[] = [
   DEFAULT_MAP_STYLE,
   {
     value: "mapbox://styles/mapbox/light-v11",
@@ -20,7 +22,7 @@ export const MAP_STYLES: MapStyle[] = [
   },
 ];
 
-export const NCT_MAPS: NctMap[] = [
+const NCT_MAPS: NctMap[] = [
   {
     name: "LO W-S",
     url: "mapbox://kengreim.4525vady",
@@ -46,3 +48,37 @@ export const NCT_MAPS: NctMap[] = [
     showDefault: false,
   },
 ];
+
+const E_NV_POLYS: AreaPolys = {
+  isSectorized: true,
+  sectorConfigs: [
+    {
+      config: "RNON",
+      polys: [
+        {
+          name: "Nugget",
+          url: nuggetUrl,
+        },
+        {
+          name: "Silver",
+          url: silverUrl,
+        },
+      ],
+    },
+    {
+      config: "RNOS",
+      polys: [
+        {
+          name: "Nugget",
+          url: nuggetUrl,
+        },
+        {
+          name: "Silver",
+          url: silverUrl,
+        },
+      ],
+    },
+  ],
+};
+
+export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS };

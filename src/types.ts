@@ -18,4 +18,32 @@ interface MapStyle {
   disabled: boolean;
 }
 
-export type { NctMap, NctMapWithSignal, MapStyle };
+type AirspaceConfig =
+  | "RNON"
+  | "RNOS"
+  | "SMFN"
+  | "SMFS"
+  | "SFOW"
+  | "SFOE"
+  | "SFO10"
+  | "OAKE"
+  | "SJCE";
+
+type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Expo";
+
+interface AirspaceConfigWithPolys {
+  config: AirspaceConfig;
+  polys: Poly[];
+}
+
+interface Poly {
+  name: SectorName;
+  url: string;
+}
+
+interface AreaPolys {
+  isSectorized: boolean;
+  sectorConfigs: AirspaceConfigWithPolys[];
+}
+
+export type { NctMap, NctMapWithSignal, MapStyle, AreaPolys };
