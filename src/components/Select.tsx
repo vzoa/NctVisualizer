@@ -22,7 +22,7 @@ const SelectTrigger: Component<TriggerProps> = (props) => {
   return (
     <SelectPrimitive.Trigger
       class={cn(
-        "flex h-10 w-full items-center justify-between rounded-sm border border-input bg-slate-800 hover:bg-slate-700 px-3 py-2 text-sm ring-offset-slate-900 text-white placeholder:text-gray-600 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "flex h-8 w-full items-center justify-between rounded-sm border border-input bg-slate-800 hover:bg-slate-700 px-3 py-2 text-sm ring-offset-slate-900 text-white placeholder:text-gray-600 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
         props.class
       )}
       {...rest}

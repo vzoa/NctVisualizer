@@ -1,21 +1,33 @@
-import { MapStyle, NctMap } from "./types";
+import { MapStyle, NctMap, AreaPolys } from "./types";
 
-export const DEFAULT_MAP_STYLE: MapStyle = {
+import nuggetUrl from "./polys/e-nv/nugget.geojson";
+import silverUrl from "./polys/e-nv/silver.geojson";
+import smfnElkhorn from "./polys/e-ca/smfn-elkhorn.geojson";
+import smfnExpo from "./polys/e-ca/smfn-expo.geojson";
+import smfsElkhorn from "./polys/e-ca/smfs-elkhorn.geojson";
+import smfsExpo from "./polys/e-ca/smfs-expo.geojson";
+
+const DEFAULT_MAP_STYLE: MapStyle = {
   value: "mapbox://styles/mapbox/empty-v9",
   label: "Empty",
   disabled: false,
 };
 
-export const MAP_STYLES: MapStyle[] = [
+const MAP_STYLES: MapStyle[] = [
   DEFAULT_MAP_STYLE,
   {
     value: "mapbox://styles/mapbox/light-v11",
     label: "World Light",
     disabled: false,
   },
+  {
+    value: "mapbox://styles/kengreim/clw6l16rw002o01q1cq9h43ft",
+    label: "Satellite Low Opacity",
+    disabled: false,
+  },
 ];
 
-export const NCT_MAPS: NctMap[] = [
+const NCT_MAPS: NctMap[] = [
   {
     name: "LO W-S",
     url: "mapbox://kengreim.4525vady",
@@ -41,3 +53,101 @@ export const NCT_MAPS: NctMap[] = [
     showDefault: false,
   },
 ];
+
+const E_NV_POLYS: AreaPolys = {
+  defaultConfig: "RNOS",
+  sectorConfigs: [
+    {
+      sectorName: "Nugget",
+      configPolyUrls: [
+        {
+          config: "RNOS",
+          url: nuggetUrl,
+        },
+        {
+          config: "RNON",
+          url: nuggetUrl,
+        },
+      ],
+    },
+    {
+      sectorName: "Silver",
+      configPolyUrls: [
+        {
+          config: "RNOS",
+          url: silverUrl,
+        },
+        {
+          config: "RNON",
+          url: silverUrl,
+        },
+      ],
+    },
+  ],
+};
+
+const E_CA_POLYS: AreaPolys = {
+  defaultConfig: "SMFS",
+  sectorConfigs: [
+    {
+      sectorName: "Elkhorn",
+      configPolyUrls: [
+        {
+          config: "SMFS",
+          url: smfsElkhorn,
+        },
+        {
+          config: "SMFN",
+          url: smfnElkhorn,
+        },
+      ],
+    },
+    {
+      sectorName: "Expo",
+      configPolyUrls: [
+        {
+          config: "SMFS",
+          url: smfsExpo,
+        },
+        {
+          config: "SMFN",
+          url: smfnExpo,
+        },
+      ],
+    },
+  ],
+};
+
+// const E_CA_POLYS: AreaPolys = {
+//   defaultConfig: "SMFS",
+//   sectorConfigs: [
+//     {
+//       config: "SMFS",
+//       polys: [
+//         {
+//           name: "Elkhorn",
+//           url: smfnElkhorn,
+//         },
+//         {
+//           name: "Expo",
+//           url: silverUrl,
+//         },
+//       ],
+//     },
+//     {
+//       config: "SMFN",
+//       polys: [
+//         {
+//           name: "Elkhorn",
+//           url: nuggetUrl,
+//         },
+//         {
+//           name: "Expo",
+//           url: silverUrl,
+//         },
+//       ],
+//     },
+//   ],
+// };
+
+export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS, E_CA_POLYS };
