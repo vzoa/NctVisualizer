@@ -1,6 +1,11 @@
 import { MapStyle, NctMap, AreaPolys } from "./types";
+
 import nuggetUrl from "./polys/e-nv/nugget.geojson";
 import silverUrl from "./polys/e-nv/silver.geojson";
+import smfnElkhorn from "./polys/e-nv/smfn-elkhorn.geojson";
+import smfnExpo from "./polys/e-ca/smfn-expo.geojson";
+import smfsElkhorn from "./polys/e-ca/smfs-elkhorn.geojson";
+import smfsExpo from "./polys/e-ca/smfs-expo.geojson";
 
 const DEFAULT_MAP_STYLE: MapStyle = {
   value: "mapbox://styles/mapbox/empty-v9",
@@ -50,35 +55,67 @@ const NCT_MAPS: NctMap[] = [
 ];
 
 const E_NV_POLYS: AreaPolys = {
-  isSectorized: true,
+  defaultConfig: "RNOS",
   sectorConfigs: [
     {
-      config: "RNON",
-      polys: [
+      sectorName: "Nugget",
+      configPolyUrls: [
         {
-          name: "Nugget",
+          config: "RNOS",
           url: nuggetUrl,
         },
         {
-          name: "Silver",
-          url: silverUrl,
+          config: "RNON",
+          url: nuggetUrl,
         },
       ],
     },
     {
-      config: "RNOS",
-      polys: [
+      sectorName: "Silver",
+      configPolyUrls: [
         {
-          name: "Nugget",
-          url: nuggetUrl,
+          config: "RNOS",
+          url: silverUrl,
         },
         {
-          name: "Silver",
+          config: "RNON",
           url: silverUrl,
         },
       ],
     },
   ],
 };
+
+// const E_CA_POLYS: AreaPolys = {
+//   defaultConfig: "SMFS",
+//   sectorConfigs: [
+//     {
+//       config: "SMFS",
+//       polys: [
+//         {
+//           name: "Elkhorn",
+//           url: smfnElkhorn,
+//         },
+//         {
+//           name: "Expo",
+//           url: silverUrl,
+//         },
+//       ],
+//     },
+//     {
+//       config: "SMFN",
+//       polys: [
+//         {
+//           name: "Elkhorn",
+//           url: nuggetUrl,
+//         },
+//         {
+//           name: "Expo",
+//           url: silverUrl,
+//         },
+//       ],
+//     },
+//   ],
+// };
 
 export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS };

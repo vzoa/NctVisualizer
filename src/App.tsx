@@ -1,4 +1,4 @@
-import { Component, createSignal, For, Show } from "solid-js";
+import { Component, createEffect, createSignal, For, Show } from "solid-js";
 import MapGL, { Layer, Source, Viewport } from "solid-map-gl";
 import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -6,11 +6,12 @@ import { MapStyleSelector } from "./MapStyleSelector";
 import { MapStyle, NctMapWithSignal } from "./types";
 import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, MAP_STYLES } from "./config";
 
-import { getGeojsonSources } from "./lib/geojson";
+import { createDefaultState, getGeojsonSources } from "./lib/geojson";
 import { GeojsonPolySources } from "./GeojsonPolySources";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/Select";
 import { Select } from "@kobalte/core/select";
 import { NctBasemaps } from "./NctBasemaps";
+import { createStore } from "solid-js/store";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -34,6 +35,14 @@ const App: Component = () => {
   const [rno, setRno] = createSignal("RNOS");
 
   const sources = getGeojsonSources(E_NV_POLYS);
+
+  const [rnoStore, setRnoStore] = createStore(createDefaultState(E_NV_POLYS));
+
+  // Console debugging effects only created in DEV
+  if (import.meta.env.DEV) {
+    createEffect(() => console.log(rnoStore.selectedConfig));
+    createEffect(() => console.log(rnoStore.sectors.map((x) => x.isDisplayed)));
+  }
 
   return (
     <div class="flex h-screen">
@@ -59,9 +68,9 @@ const App: Component = () => {
           <h2 class="text-white text-xl">Sectors</h2>
 
           <Select
-            options={["RNOS", " RNON"]}
-            value={rno()}
-            onChange={setRno}
+            options={["RNOS", "RNON"]}
+            value={rnoStore.selectedConfig}
+            onChange={(val) => setRnoStore("selectedConfig", val)}
             disallowEmptySelection={true}
             itemComponent={(props) => (
               <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
@@ -72,6 +81,25 @@ const App: Component = () => {
             </SelectTrigger>
             <SelectContent />
           </Select>
+
+          <div class="flex flex-col space-y-1 mt-2">
+            <For each={rnoStore.sectors}>
+              {(sector) => (
+                <Checkbox
+                  label={sector.name}
+                  checked={sector.isDisplayed}
+                  onChange={(val) =>
+                    setRnoStore(
+                      "sectors",
+                      (checkboxSector) => checkboxSector.name === sector.name,
+                      "isDisplayed",
+                      val
+                    )
+                  }
+                />
+              )}
+            </For>
+          </div>
         </div>
       </div>
       <div class="grow">
@@ -138,17 +166,30 @@ const App: Component = () => {
           {/*  />*/}
           {/*</Source>*/}
           <GeojsonPolySources sources={sources} />
-          <Layer
-            id="test"
-            style={{
-              source: "RNON_Nugget",
-              type: "line",
-              paint: {
-                "line-color": "hsl(100, 100%, 50%)",
-                "line-width": 2,
-              },
-            }}
-          />
+          {/*<Layer*/}
+          {/*  id="test"*/}
+          {/*  style={{*/}
+          {/*    source: "Nugget_RNOS",*/}
+          {/*    type: "line",*/}
+          {/*    paint: {*/}
+          {/*      "line-color": "hsl(100, 100%, 50%)",*/}
+          {/*      "line-width": 2,*/}
+          {/*    },*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <For each={rnoStore.sectors}>
+            {(sector) => (
+              <Show when={sector.isDisplayed}>
+                <Layer
+                  style={{
+                    source: `${sector.name}_${rnoStore.selectedConfig}`,
+                    type: "line",
+                    paint: { "line-color": "hsl(100, 100%, 50%)", "line-width": 2 },
+                  }}
+                />
+              </Show>
+            )}
+          </For>
         </MapGL>
       </div>
     </div>

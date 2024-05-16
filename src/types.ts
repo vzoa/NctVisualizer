@@ -32,18 +32,21 @@ type AirspaceConfig =
 type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Expo";
 
 interface AirspaceConfigWithPolys {
-  config: AirspaceConfig;
-  polys: Poly[];
-}
-
-interface Poly {
-  name: SectorName;
-  url: string;
+  sectorName: SectorName;
+  configPolyUrls: { config: AirspaceConfig; url: string }[];
 }
 
 interface AreaPolys {
-  isSectorized: boolean;
+  defaultConfig: AirspaceConfig;
   sectorConfigs: AirspaceConfigWithPolys[];
 }
 
-export type { NctMap, NctMapWithSignal, MapStyle, AreaPolys };
+interface AirspaceDisplayState {
+  selectedConfig: AirspaceConfig;
+  sectors: {
+    name: SectorName;
+    isDisplayed: boolean;
+  }[];
+}
+
+export type { NctMap, NctMapWithSignal, MapStyle, AreaPolys, AirspaceConfig, AirspaceDisplayState };
