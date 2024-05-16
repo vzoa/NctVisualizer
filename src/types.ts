@@ -18,6 +18,8 @@ interface MapStyle {
   disabled: boolean;
 }
 
+type AirspaceConfigDependentGroup = "RNO" | "SMF" | "BAY";
+
 type AirspaceConfig =
   | "RNON"
   | "RNOS"
@@ -37,11 +39,13 @@ interface AirspaceConfigWithPolys {
 }
 
 interface AreaPolys {
+  name: AirspaceConfigDependentGroup;
   defaultConfig: AirspaceConfig;
   sectorConfigs: AirspaceConfigWithPolys[];
 }
 
 interface AirspaceDisplayState {
+  name: AirspaceConfigDependentGroup;
   selectedConfig: AirspaceConfig;
   sectors: {
     name: SectorName;
@@ -49,4 +53,18 @@ interface AirspaceDisplayState {
   }[];
 }
 
-export type { NctMap, NctMapWithSignal, MapStyle, AreaPolys, AirspaceConfig, AirspaceDisplayState };
+interface AppDisplayState {
+  updateCount: number;
+  areaDisplayStates: AirspaceDisplayState[];
+}
+
+export type {
+  NctMap,
+  NctMapWithSignal,
+  MapStyle,
+  AreaPolys,
+  AirspaceConfig,
+  AirspaceDisplayState,
+  AppDisplayState,
+  AirspaceConfigDependentGroup,
+};

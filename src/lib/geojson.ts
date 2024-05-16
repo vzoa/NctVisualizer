@@ -9,6 +9,7 @@ const getGeojsonSources = (config: AreaPolys) =>
   );
 
 const createDefaultState = (config: AreaPolys): AirspaceDisplayState => ({
+  name: config.name,
   selectedConfig: config.defaultConfig,
   sectors: config.sectorConfigs.map((c) => ({ name: c.sectorName, isDisplayed: false })),
 });

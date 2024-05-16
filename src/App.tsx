@@ -3,14 +3,14 @@ import MapGL, { Layer, Viewport } from "solid-map-gl";
 import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./MapStyleSelector";
-import { NctMapWithSignal } from "./types";
+import { AppDisplayState, NctMapWithSignal } from "./types";
 import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS } from "./config";
 
 import { createDefaultState, getGeojsonSources } from "./lib/geojson";
 import { GeojsonPolySources } from "./GeojsonPolySources";
 import { NctBasemaps } from "./NctBasemaps";
 import { createStore, SetStoreFunction } from "solid-js/store";
-import { SimpleSectorDisplayControls } from "./SimpleSectorDisplayControls";
+import { SectorDisplayWithControls } from "./SectorDisplayWithControls";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -36,7 +36,10 @@ const App: Component = () => {
   const [rnoStore, setRnoStore] = createStore(createDefaultState(E_NV_POLYS));
   const [smfStore, setSmfStore] = createStore(createDefaultState(E_CA_POLYS));
 
-  const x = () => {};
+  const [allStore, setAllStore] = createStore<AppDisplayState>({
+    updateCount: 0,
+    areaDisplayStates: [createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
+  });
 
   // Console debugging effects only created in DEV
   if (import.meta.env.DEV) {
@@ -44,6 +47,11 @@ const App: Component = () => {
     createEffect(() => console.log(rnoStore.sectors.map((x) => x.isDisplayed)));
     createEffect(() => console.log(smfStore.selectedConfig));
     createEffect(() => console.log(smfStore.sectors.map((x) => x.isDisplayed)));
+
+    createEffect(() => {
+      console.log("Update count", allStore.updateCount);
+      console.log("Sectors display state", allStore.areaDisplayStates);
+    });
   }
 
   return (
@@ -69,19 +77,35 @@ const App: Component = () => {
         <div>
           <h2 class="text-white text-xl">Sectors</h2>
 
-          <SimpleSectorDisplayControls
+          <SectorDisplayWithControls
+            airspaceGroup={"RNO"}
             airspaceConfigOptions={["RNOS", "RNON"]}
-            store={rnoStore}
-            setStore={setRnoStore}
-            showDropdown={true}
+            store={allStore}
+            setStore={setAllStore}
           />
 
-          <SimpleSectorDisplayControls
+          <SectorDisplayWithControls
+            airspaceGroup={"SMF"}
             airspaceConfigOptions={["SMFS", "SMFN"]}
-            store={smfStore}
-            setStore={setSmfStore}
-            showDropdown={true}
+            store={allStore}
+            setStore={setAllStore}
           />
+
+          {/*<SimpleSectorDisplayControls*/}
+          {/*  airspaceConfigOptions={["RNOS", "RNON"]}*/}
+          {/*  store={rnoStore}*/}
+          {/*  setStore={setRnoStore}*/}
+          {/*  setUpdateCount={setUpdateCount}*/}
+          {/*  showDropdown={true}*/}
+          {/*/>*/}
+
+          {/*<SimpleSectorDisplayControls*/}
+          {/*  airspaceConfigOptions={["SMFS", "SMFN"]}*/}
+          {/*  store={smfStore}*/}
+          {/*  setStore={setSmfStore}*/}
+          {/*  setUpdateCount={setUpdateCount}*/}
+          {/*  showDropdown={true}*/}
+          {/*/>*/}
 
           {/*<Select*/}
           {/*  options={["RNOS", "RNON"]}*/}

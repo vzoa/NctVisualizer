@@ -55,6 +55,7 @@ const NCT_MAPS: NctMap[] = [
 ];
 
 const E_NV_POLYS: AreaPolys = {
+  name: "RNO",
   defaultConfig: "RNOS",
   sectorConfigs: [
     {
@@ -87,6 +88,7 @@ const E_NV_POLYS: AreaPolys = {
 };
 
 const E_CA_POLYS: AreaPolys = {
+  name: "SMF",
   defaultConfig: "SMFS",
   sectorConfigs: [
     {
