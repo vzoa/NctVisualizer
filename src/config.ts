@@ -1,11 +1,11 @@
 import { MapStyle, NctMap, AreaPolys } from "./types";
 
-import nuggetUrl from "./polys/e-nv/nugget.geojson";
-import silverUrl from "./polys/e-nv/silver.geojson";
+import nugget from "./polys/e-nv/nugget.geojson";
+import silver from "./polys/e-nv/silver.geojson";
 import smfnElkhorn from "./polys/e-ca/smfn-elkhorn.geojson";
-import smfnExpo from "./polys/e-ca/smfn-expo.geojson";
+import smfnParadise from "./polys/e-ca/smfn-paradise.geojson";
 import smfsElkhorn from "./polys/e-ca/smfs-elkhorn.geojson";
-import smfsExpo from "./polys/e-ca/smfs-expo.geojson";
+import smfsParadise from "./polys/e-ca/smfs-paradise.geojson";
 
 const DEFAULT_MAP_STYLE: MapStyle = {
   value: "mapbox://styles/mapbox/empty-v9",
@@ -62,11 +62,11 @@ const E_NV_POLYS: AreaPolys = {
       configPolyUrls: [
         {
           config: "RNOS",
-          url: nuggetUrl,
+          url: nugget,
         },
         {
           config: "RNON",
-          url: nuggetUrl,
+          url: nugget,
         },
       ],
     },
@@ -75,11 +75,11 @@ const E_NV_POLYS: AreaPolys = {
       configPolyUrls: [
         {
           config: "RNOS",
-          url: silverUrl,
+          url: silver,
         },
         {
           config: "RNON",
-          url: silverUrl,
+          url: silver,
         },
       ],
     },
@@ -103,51 +103,19 @@ const E_CA_POLYS: AreaPolys = {
       ],
     },
     {
-      sectorName: "Expo",
+      sectorName: "Paradise",
       configPolyUrls: [
         {
           config: "SMFS",
-          url: smfsExpo,
+          url: smfsParadise,
         },
         {
           config: "SMFN",
-          url: smfnExpo,
+          url: smfnParadise,
         },
       ],
     },
   ],
 };
-
-// const E_CA_POLYS: AreaPolys = {
-//   defaultConfig: "SMFS",
-//   sectorConfigs: [
-//     {
-//       config: "SMFS",
-//       polys: [
-//         {
-//           name: "Elkhorn",
-//           url: smfnElkhorn,
-//         },
-//         {
-//           name: "Expo",
-//           url: silverUrl,
-//         },
-//       ],
-//     },
-//     {
-//       config: "SMFN",
-//       polys: [
-//         {
-//           name: "Elkhorn",
-//           url: nuggetUrl,
-//         },
-//         {
-//           name: "Expo",
-//           url: silverUrl,
-//         },
-//       ],
-//     },
-//   ],
-// };
 
 export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS, E_CA_POLYS };

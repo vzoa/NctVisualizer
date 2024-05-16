@@ -29,7 +29,7 @@ type AirspaceConfig =
   | "OAKE"
   | "SJCE";
 
-type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Expo";
+type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Paradise";
 
 interface AirspaceConfigWithPolys {
   sectorName: SectorName;
