@@ -1,17 +1,16 @@
 import { Component, createEffect, createSignal, For, Show } from "solid-js";
-import MapGL, { Layer, Source, Viewport } from "solid-map-gl";
+import MapGL, { Layer, Viewport } from "solid-map-gl";
 import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./MapStyleSelector";
-import { MapStyle, NctMapWithSignal } from "./types";
-import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, MAP_STYLES } from "./config";
+import { NctMapWithSignal } from "./types";
+import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS } from "./config";
 
 import { createDefaultState, getGeojsonSources } from "./lib/geojson";
 import { GeojsonPolySources } from "./GeojsonPolySources";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/Select";
-import { Select } from "@kobalte/core/select";
 import { NctBasemaps } from "./NctBasemaps";
-import { createStore } from "solid-js/store";
+import { createStore, SetStoreFunction } from "solid-js/store";
+import { SimpleSectorDisplayControls } from "./SimpleSectorDisplayControls";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -32,16 +31,19 @@ const App: Component = () => {
     };
   });
 
-  const [rno, setRno] = createSignal("RNOS");
-
-  const sources = getGeojsonSources(E_NV_POLYS);
+  const sources = [...getGeojsonSources(E_NV_POLYS), ...getGeojsonSources(E_CA_POLYS)];
 
   const [rnoStore, setRnoStore] = createStore(createDefaultState(E_NV_POLYS));
+  const [smfStore, setSmfStore] = createStore(createDefaultState(E_CA_POLYS));
+
+  const x = () => {};
 
   // Console debugging effects only created in DEV
   if (import.meta.env.DEV) {
     createEffect(() => console.log(rnoStore.selectedConfig));
     createEffect(() => console.log(rnoStore.sectors.map((x) => x.isDisplayed)));
+    createEffect(() => console.log(smfStore.selectedConfig));
+    createEffect(() => console.log(smfStore.sectors.map((x) => x.isDisplayed)));
   }
 
   return (
@@ -67,39 +69,53 @@ const App: Component = () => {
         <div>
           <h2 class="text-white text-xl">Sectors</h2>
 
-          <Select
-            options={["RNOS", "RNON"]}
-            value={rnoStore.selectedConfig}
-            onChange={(val) => setRnoStore("selectedConfig", val)}
-            disallowEmptySelection={true}
-            itemComponent={(props) => (
-              <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
-            )}
-          >
-            <SelectTrigger aria-label="Map Style" class="w-[180px]">
-              <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
-            </SelectTrigger>
-            <SelectContent />
-          </Select>
+          <SimpleSectorDisplayControls
+            airspaceConfigOptions={["RNOS", "RNON"]}
+            store={rnoStore}
+            setStore={setRnoStore}
+            showDropdown={true}
+          />
 
-          <div class="flex flex-col space-y-1 mt-2">
-            <For each={rnoStore.sectors}>
-              {(sector) => (
-                <Checkbox
-                  label={sector.name}
-                  checked={sector.isDisplayed}
-                  onChange={(val) =>
-                    setRnoStore(
-                      "sectors",
-                      (checkboxSector) => checkboxSector.name === sector.name,
-                      "isDisplayed",
-                      val
-                    )
-                  }
-                />
-              )}
-            </For>
-          </div>
+          <SimpleSectorDisplayControls
+            airspaceConfigOptions={["SMFS", "SMFN"]}
+            store={smfStore}
+            setStore={setSmfStore}
+            showDropdown={true}
+          />
+
+          {/*<Select*/}
+          {/*  options={["RNOS", "RNON"]}*/}
+          {/*  value={rnoStore.selectedConfig}*/}
+          {/*  onChange={(val) => setRnoStore("selectedConfig", val)}*/}
+          {/*  disallowEmptySelection={true}*/}
+          {/*  itemComponent={(props) => (*/}
+          {/*    <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>*/}
+          {/*  )}*/}
+          {/*>*/}
+          {/*  <SelectTrigger aria-label="Map Style" class="w-[180px]">*/}
+          {/*    <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>*/}
+          {/*  </SelectTrigger>*/}
+          {/*  <SelectContent />*/}
+          {/*</Select>*/}
+
+          {/*<div class="flex flex-col space-y-1 mt-2">*/}
+          {/*  <For each={rnoStore.sectors}>*/}
+          {/*    {(sector) => (*/}
+          {/*      <Checkbox*/}
+          {/*        label={sector.name}*/}
+          {/*        checked={sector.isDisplayed}*/}
+          {/*        onChange={(val) =>*/}
+          {/*          setRnoStore(*/}
+          {/*            "sectors",*/}
+          {/*            (checkboxSector) => checkboxSector.name === sector.name,*/}
+          {/*            "isDisplayed",*/}
+          {/*            val*/}
+          {/*          )*/}
+          {/*        }*/}
+          {/*      />*/}
+          {/*    )}*/}
+          {/*  </For>*/}
+          {/*</div>*/}
         </div>
       </div>
       <div class="grow">
@@ -187,6 +203,26 @@ const App: Component = () => {
                     paint: { "line-color": "hsl(100, 100%, 50%)", "line-width": 2 },
                   }}
                 />
+              </Show>
+            )}
+          </For>
+
+          <For each={smfStore.sectors}>
+            {(sector) => (
+              <Show when={sector.isDisplayed}>
+                <For each={["SMFS", "SMFN"]}>
+                  {(possibleConfig) => (
+                    <Show when={possibleConfig === smfStore.selectedConfig}>
+                      <Layer
+                        style={{
+                          source: `${sector.name}_${possibleConfig}`,
+                          type: "line",
+                          paint: { "line-color": "hsl(100, 100%, 50%)", "line-width": 2 },
+                        }}
+                      />
+                    </Show>
+                  )}
+                </For>
               </Show>
             )}
           </For>

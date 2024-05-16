@@ -2,7 +2,7 @@ import { MapStyle, NctMap, AreaPolys } from "./types";
 
 import nuggetUrl from "./polys/e-nv/nugget.geojson";
 import silverUrl from "./polys/e-nv/silver.geojson";
-import smfnElkhorn from "./polys/e-nv/smfn-elkhorn.geojson";
+import smfnElkhorn from "./polys/e-ca/smfn-elkhorn.geojson";
 import smfnExpo from "./polys/e-ca/smfn-expo.geojson";
 import smfsElkhorn from "./polys/e-ca/smfs-elkhorn.geojson";
 import smfsExpo from "./polys/e-ca/smfs-expo.geojson";
@@ -86,6 +86,38 @@ const E_NV_POLYS: AreaPolys = {
   ],
 };
 
+const E_CA_POLYS: AreaPolys = {
+  defaultConfig: "SMFS",
+  sectorConfigs: [
+    {
+      sectorName: "Elkhorn",
+      configPolyUrls: [
+        {
+          config: "SMFS",
+          url: smfsElkhorn,
+        },
+        {
+          config: "SMFN",
+          url: smfnElkhorn,
+        },
+      ],
+    },
+    {
+      sectorName: "Expo",
+      configPolyUrls: [
+        {
+          config: "SMFS",
+          url: smfsExpo,
+        },
+        {
+          config: "SMFN",
+          url: smfnExpo,
+        },
+      ],
+    },
+  ],
+};
+
 // const E_CA_POLYS: AreaPolys = {
 //   defaultConfig: "SMFS",
 //   sectorConfigs: [
@@ -118,4 +150,4 @@ const E_NV_POLYS: AreaPolys = {
 //   ],
 // };
 
-export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS };
+export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS, E_CA_POLYS };
