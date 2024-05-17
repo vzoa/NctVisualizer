@@ -63,6 +63,7 @@ const E_NV_POLYS: AreaPolys = {
   sectorConfigs: [
     {
       sectorName: "Nugget",
+      defaultColor: "#e60049",
       configPolyUrls: [
         {
           config: "RNOS",
@@ -76,6 +77,7 @@ const E_NV_POLYS: AreaPolys = {
     },
     {
       sectorName: "Silver",
+      defaultColor: "#0bb4ff",
       configPolyUrls: [
         {
           config: "RNOS",
@@ -97,6 +99,7 @@ const E_CA_POLYS: AreaPolys = {
   sectorConfigs: [
     {
       sectorName: "Elkhorn",
+      defaultColor: "#50e991",
       configPolyUrls: [
         {
           config: "SMFS",
@@ -110,6 +113,7 @@ const E_CA_POLYS: AreaPolys = {
     },
     {
       sectorName: "Paradise",
+      defaultColor: "#e6d800",
       configPolyUrls: [
         {
           config: "SMFS",

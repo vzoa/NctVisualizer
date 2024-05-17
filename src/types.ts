@@ -35,6 +35,7 @@ type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Paradise";
 
 interface AirspaceConfigWithPolys {
   sectorName: SectorName;
+  defaultColor: string;
   configPolyUrls: { config: AirspaceConfig; url: string }[];
 }
 
@@ -48,10 +49,7 @@ interface AreaPolys {
 interface AirspaceDisplayState {
   name: AirspaceConfigDependentGroup;
   selectedConfig: AirspaceConfig;
-  sectors: {
-    name: SectorName;
-    isDisplayed: boolean;
-  }[];
+  sectors: SectorDisplayState[];
 }
 
 interface AppDisplayState {
@@ -62,6 +60,12 @@ interface AppDisplayState {
 interface PolyDefinition {
   name: AirspaceConfigDependentGroup;
   polys: AreaPolys;
+}
+
+interface SectorDisplayState {
+  name: SectorName;
+  isDisplayed: boolean;
+  color: string;
 }
 
 export type {
@@ -75,4 +79,5 @@ export type {
   AirspaceConfigDependentGroup,
   SectorName,
   PolyDefinition,
+  SectorDisplayState,
 };
