@@ -64,7 +64,7 @@ interface PolyDefinition {
 
 interface SectorDisplayState {
   name: SectorName;
-  isDisplayed: boolean | undefined;
+  isDisplayed: boolean;
   color: string;
 }
 

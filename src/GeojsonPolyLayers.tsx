@@ -19,14 +19,19 @@ interface DisplayState extends SectorDisplayState {
   config: AirspaceConfig;
 }
 
-const createStartingLayers = (allPolys: PolyDefinition[]): DisplayState[] =>
+interface TrackingDisplayState extends DisplayState {
+  hasBeenModified: boolean;
+}
+
+const createStartingLayers = (allPolys: PolyDefinition[]): TrackingDisplayState[] =>
   allPolys.flatMap((p) =>
     p.polys.sectorConfigs.flatMap((s) =>
       s.configPolyUrls.map((c) => ({
         name: s.sectorName,
         config: c.config,
-        isDisplayed: undefined,
+        isDisplayed: false,
         color: s.defaultColor,
+        hasBeenModified: false,
       }))
     )
   );
@@ -51,10 +56,10 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
       (layer) => displayMap.has(layer.name),
       produce((layer) => {
         let displayLayer = displayMap.get(layer.name)!;
-        layer.isDisplayed =
-          typeof layer.isDisplayed === undefined
-            ? undefined
-            : displayLayer.config === layer.config && displayLayer.isDisplayed;
+        layer.hasBeenModified =
+          layer.hasBeenModified ||
+          (displayLayer.config === layer.config && displayLayer.isDisplayed != layer.isDisplayed);
+        layer.isDisplayed = displayLayer.config === layer.config && displayLayer.isDisplayed;
         layer.color = displayLayer.color;
       })
     );
@@ -65,7 +70,7 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
   return (
     <For each={allLayers}>
       {(layer) => (
-        <Show when={typeof layer.isDisplayed !== undefined}>
+        <Show when={layer.hasBeenModified}>
           <Layer
             style={{
               source: `${layer.name}_${layer.config}`,
