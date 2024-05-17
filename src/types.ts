@@ -49,11 +49,7 @@ interface AreaPolys {
 interface AirspaceDisplayState {
   name: AirspaceConfigDependentGroup;
   selectedConfig: AirspaceConfig;
-  sectors: {
-    name: SectorName;
-    isDisplayed: boolean;
-    color: string;
-  }[];
+  sectors: SectorDisplayState[];
 }
 
 interface AppDisplayState {
@@ -64,6 +60,12 @@ interface AppDisplayState {
 interface PolyDefinition {
   name: AirspaceConfigDependentGroup;
   polys: AreaPolys;
+}
+
+interface SectorDisplayState {
+  name: SectorName;
+  isDisplayed: boolean | undefined;
+  color: string;
 }
 
 export type {
@@ -77,4 +79,5 @@ export type {
   AirspaceConfigDependentGroup,
   SectorName,
   PolyDefinition,
+  SectorDisplayState,
 };

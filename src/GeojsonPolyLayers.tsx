@@ -1,4 +1,10 @@
-import { AirspaceConfig, AppDisplayState, PolyDefinition, SectorName } from "./types";
+import {
+  AirspaceConfig,
+  AppDisplayState,
+  PolyDefinition,
+  SectorDisplayState,
+  SectorName,
+} from "./types";
 import { Component, createEffect, For, Show } from "solid-js";
 import { Layer } from "solid-map-gl";
 import { createStore, produce } from "solid-js/store";
@@ -9,11 +15,8 @@ interface GeojsonPolyLayersProps {
   allPolys: PolyDefinition[];
 }
 
-interface DisplayState {
-  name: SectorName;
-  isDisplayed: boolean;
+interface DisplayState extends SectorDisplayState {
   config: AirspaceConfig;
-  color: string;
 }
 
 const createStartingLayers = (allPolys: PolyDefinition[]): DisplayState[] =>
@@ -22,7 +25,7 @@ const createStartingLayers = (allPolys: PolyDefinition[]): DisplayState[] =>
       s.configPolyUrls.map((c) => ({
         name: s.sectorName,
         config: c.config,
-        isDisplayed: false,
+        isDisplayed: undefined,
         color: s.defaultColor,
       }))
     )
@@ -48,7 +51,10 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
       (layer) => displayMap.has(layer.name),
       produce((layer) => {
         let displayLayer = displayMap.get(layer.name)!;
-        layer.isDisplayed = displayLayer.config === layer.config && displayLayer.isDisplayed;
+        layer.isDisplayed =
+          typeof layer.isDisplayed === undefined
+            ? undefined
+            : displayLayer.config === layer.config && displayLayer.isDisplayed;
         layer.color = displayLayer.color;
       })
     );
@@ -59,13 +65,14 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
   return (
     <For each={allLayers}>
       {(layer) => (
-        <Show when={layer.isDisplayed}>
+        <Show when={typeof layer.isDisplayed !== undefined}>
           <Layer
             style={{
               source: `${layer.name}_${layer.config}`,
               type: "line",
               paint: { "line-color": layer.color, "line-width": 2 },
             }}
+            visible={layer.isDisplayed}
           />
           <Layer
             style={{
@@ -76,6 +83,7 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
                 "fill-opacity": 0.2,
               },
             }}
+            visible={layer.isDisplayed}
           />
         </Show>
       )}
