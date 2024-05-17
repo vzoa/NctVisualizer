@@ -54,9 +54,12 @@ const NCT_MAPS: NctMap[] = [
   },
 ];
 
+const BAY_DEFAULT_CONFIG = "SFOW";
+
 const E_NV_POLYS: AreaPolys = {
   name: "RNO",
   defaultConfig: "RNOS",
+  possibleConfigs: ["RNOS", "RNON"],
   sectorConfigs: [
     {
       sectorName: "Nugget",
@@ -90,6 +93,7 @@ const E_NV_POLYS: AreaPolys = {
 const E_CA_POLYS: AreaPolys = {
   name: "SMF",
   defaultConfig: "SMFS",
+  possibleConfigs: ["SMFS", "SMFN"],
   sectorConfigs: [
     {
       sectorName: "Elkhorn",

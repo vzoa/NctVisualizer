@@ -1,4 +1,4 @@
-import { Component, createEffect, For, Setter, Show } from "solid-js";
+import { Component, createEffect, For, Show } from "solid-js";
 import { AirspaceConfig, AirspaceConfigDependentGroup, AppDisplayState } from "./types";
 import { SetStoreFunction } from "solid-js/store";
 import { Select } from "@kobalte/core/select";
@@ -12,6 +12,7 @@ export const SectorDisplayWithControls: Component<{
   setStore: SetStoreFunction<AppDisplayState>;
   dependentOnConfig?: AirspaceConfig;
 }> = (props) => {
+  // TODO -- need to make sure this works
   if (props.dependentOnConfig) {
     createEffect(() => {
       props.setStore(
@@ -72,14 +73,6 @@ export const SectorDisplayWithControls: Component<{
                 );
                 props.setStore("updateCount", (prev) => prev + 1);
               }}
-              // onChange={(val) =>
-              //   props.setStore(
-              //     "sectors",
-              //     (checkboxSector) => checkboxSector.name === sector.name,
-              //     "isDisplayed",
-              //     val
-              //   )
-              // }
             />
           )}
         </For>

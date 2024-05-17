@@ -41,6 +41,7 @@ interface AirspaceConfigWithPolys {
 interface AreaPolys {
   name: AirspaceConfigDependentGroup;
   defaultConfig: AirspaceConfig;
+  possibleConfigs: AirspaceConfig[];
   sectorConfigs: AirspaceConfigWithPolys[];
 }
 
@@ -58,6 +59,11 @@ interface AppDisplayState {
   areaDisplayStates: AirspaceDisplayState[];
 }
 
+interface PolyDefinition {
+  name: AirspaceConfigDependentGroup;
+  polys: AreaPolys;
+}
+
 export type {
   NctMap,
   NctMapWithSignal,
@@ -67,4 +73,6 @@ export type {
   AirspaceDisplayState,
   AppDisplayState,
   AirspaceConfigDependentGroup,
+  SectorName,
+  PolyDefinition,
 };

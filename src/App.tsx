@@ -1,16 +1,16 @@
-import { Component, createEffect, createSignal, For, Show } from "solid-js";
-import MapGL, { Layer, Viewport } from "solid-map-gl";
+import { Component, createEffect, createSignal, For } from "solid-js";
+import MapGL, { Viewport } from "solid-map-gl";
 import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./MapStyleSelector";
-import { AppDisplayState, NctMapWithSignal } from "./types";
+import { AppDisplayState, NctMapWithSignal, PolyDefinition } from "./types";
 import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS } from "./config";
-
 import { createDefaultState, getGeojsonSources } from "./lib/geojson";
 import { GeojsonPolySources } from "./GeojsonPolySources";
 import { NctBasemaps } from "./NctBasemaps";
-import { createStore, SetStoreFunction } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { SectorDisplayWithControls } from "./SectorDisplayWithControls";
+import { GeojsonPolyLayers } from "./GeojsonPolyLayers";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -31,11 +31,12 @@ const App: Component = () => {
     };
   });
 
-  const sources = [...getGeojsonSources(E_NV_POLYS), ...getGeojsonSources(E_CA_POLYS)];
+  const polyDefinitions: PolyDefinition[] = [
+    { name: "RNO", polys: E_NV_POLYS },
+    { name: "SMF", polys: E_CA_POLYS },
+  ];
 
-  const [rnoStore, setRnoStore] = createStore(createDefaultState(E_NV_POLYS));
-  const [smfStore, setSmfStore] = createStore(createDefaultState(E_CA_POLYS));
-
+  const sources = polyDefinitions.flatMap((p) => getGeojsonSources(p.polys));
   const [allStore, setAllStore] = createStore<AppDisplayState>({
     updateCount: 0,
     areaDisplayStates: [createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
@@ -43,11 +44,6 @@ const App: Component = () => {
 
   // Console debugging effects only created in DEV
   if (import.meta.env.DEV) {
-    createEffect(() => console.log(rnoStore.selectedConfig));
-    createEffect(() => console.log(rnoStore.sectors.map((x) => x.isDisplayed)));
-    createEffect(() => console.log(smfStore.selectedConfig));
-    createEffect(() => console.log(smfStore.sectors.map((x) => x.isDisplayed)));
-
     createEffect(() => {
       console.log("Update count", allStore.updateCount);
       console.log("Sectors display state", allStore.areaDisplayStates);
@@ -90,56 +86,6 @@ const App: Component = () => {
             store={allStore}
             setStore={setAllStore}
           />
-
-          {/*<SimpleSectorDisplayControls*/}
-          {/*  airspaceConfigOptions={["RNOS", "RNON"]}*/}
-          {/*  store={rnoStore}*/}
-          {/*  setStore={setRnoStore}*/}
-          {/*  setUpdateCount={setUpdateCount}*/}
-          {/*  showDropdown={true}*/}
-          {/*/>*/}
-
-          {/*<SimpleSectorDisplayControls*/}
-          {/*  airspaceConfigOptions={["SMFS", "SMFN"]}*/}
-          {/*  store={smfStore}*/}
-          {/*  setStore={setSmfStore}*/}
-          {/*  setUpdateCount={setUpdateCount}*/}
-          {/*  showDropdown={true}*/}
-          {/*/>*/}
-
-          {/*<Select*/}
-          {/*  options={["RNOS", "RNON"]}*/}
-          {/*  value={rnoStore.selectedConfig}*/}
-          {/*  onChange={(val) => setRnoStore("selectedConfig", val)}*/}
-          {/*  disallowEmptySelection={true}*/}
-          {/*  itemComponent={(props) => (*/}
-          {/*    <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>*/}
-          {/*  )}*/}
-          {/*>*/}
-          {/*  <SelectTrigger aria-label="Map Style" class="w-[180px]">*/}
-          {/*    <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>*/}
-          {/*  </SelectTrigger>*/}
-          {/*  <SelectContent />*/}
-          {/*</Select>*/}
-
-          {/*<div class="flex flex-col space-y-1 mt-2">*/}
-          {/*  <For each={rnoStore.sectors}>*/}
-          {/*    {(sector) => (*/}
-          {/*      <Checkbox*/}
-          {/*        label={sector.name}*/}
-          {/*        checked={sector.isDisplayed}*/}
-          {/*        onChange={(val) =>*/}
-          {/*          setRnoStore(*/}
-          {/*            "sectors",*/}
-          {/*            (checkboxSector) => checkboxSector.name === sector.name,*/}
-          {/*            "isDisplayed",*/}
-          {/*            val*/}
-          {/*          )*/}
-          {/*        }*/}
-          {/*      />*/}
-          {/*    )}*/}
-          {/*  </For>*/}
-          {/*</div>*/}
         </div>
       </div>
       <div class="grow">
@@ -155,101 +101,8 @@ const App: Component = () => {
           debug={import.meta.env.DEV}
         >
           <NctBasemaps maps={nctMaps} />
-          {/*<Source*/}
-          {/*  source={{*/}
-          {/*    type: "geojson",*/}
-          {/*    data: nuggetUrl,*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  <Layer*/}
-          {/*    style={{*/}
-          {/*      type: "fill",*/}
-          {/*      paint: {*/}
-          {/*        "fill-color": "hsl(300, 100%, 50%)",*/}
-          {/*        "fill-opacity": 0.2,*/}
-          {/*      },*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*  <Layer*/}
-          {/*    style={{*/}
-          {/*      type: "line",*/}
-          {/*      paint: {*/}
-          {/*        "line-color": "hsl(300, 100%, 50%)",*/}
-          {/*        "line-width": 2,*/}
-          {/*      },*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*</Source>*/}
-          {/*<Source*/}
-          {/*  source={{*/}
-          {/*    type: "geojson",*/}
-          {/*    data: silverUrl,*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  <Layer*/}
-          {/*    style={{*/}
-          {/*      type: "fill",*/}
-          {/*      paint: {*/}
-          {/*        "fill-color": "hsl(100, 100%, 50%)",*/}
-          {/*        "fill-opacity": 0.2,*/}
-          {/*      },*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*  <Layer*/}
-          {/*    style={{*/}
-          {/*      type: "line",*/}
-          {/*      paint: {*/}
-          {/*        "line-color": "hsl(100, 100%, 50%)",*/}
-          {/*        "line-width": 2,*/}
-          {/*      },*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*</Source>*/}
           <GeojsonPolySources sources={sources} />
-          {/*<Layer*/}
-          {/*  id="test"*/}
-          {/*  style={{*/}
-          {/*    source: "Nugget_RNOS",*/}
-          {/*    type: "line",*/}
-          {/*    paint: {*/}
-          {/*      "line-color": "hsl(100, 100%, 50%)",*/}
-          {/*      "line-width": 2,*/}
-          {/*    },*/}
-          {/*  }}*/}
-          {/*/>*/}
-          <For each={rnoStore.sectors}>
-            {(sector) => (
-              <Show when={sector.isDisplayed}>
-                <Layer
-                  style={{
-                    source: `${sector.name}_${rnoStore.selectedConfig}`,
-                    type: "line",
-                    paint: { "line-color": "hsl(100, 100%, 50%)", "line-width": 2 },
-                  }}
-                />
-              </Show>
-            )}
-          </For>
-
-          <For each={smfStore.sectors}>
-            {(sector) => (
-              <Show when={sector.isDisplayed}>
-                <For each={["SMFS", "SMFN"]}>
-                  {(possibleConfig) => (
-                    <Show when={possibleConfig === smfStore.selectedConfig}>
-                      <Layer
-                        style={{
-                          source: `${sector.name}_${possibleConfig}`,
-                          type: "line",
-                          paint: { "line-color": "hsl(100, 100%, 50%)", "line-width": 2 },
-                        }}
-                      />
-                    </Show>
-                  )}
-                </For>
-              </Show>
-            )}
-          </For>
+          <GeojsonPolyLayers displayStateStore={allStore} allPolys={polyDefinitions} />
         </MapGL>
       </div>
     </div>
