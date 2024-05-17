@@ -75,7 +75,22 @@ export const SectorDisplayWithControls: Component<{
                   props.setStore("updateCount", (prev) => prev + 1);
                 }}
               />
-              <input type="color" value="#ffffff" class="w-6 h-6 mr-2" />
+              <input
+                type="color"
+                value={sector.color}
+                class="w-6 h-6 mr-2"
+                onChange={(e) => {
+                  props.setStore(
+                    "areaDisplayStates",
+                    (a) => a.name === props.airspaceGroup,
+                    "sectors",
+                    (s) => s.name === sector.name,
+                    "color",
+                    e.target.value
+                  );
+                  props.setStore("updateCount", (prev) => prev + 1);
+                }}
+              />
             </div>
           )}
         </For>

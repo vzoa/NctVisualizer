@@ -35,6 +35,7 @@ type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Paradise";
 
 interface AirspaceConfigWithPolys {
   sectorName: SectorName;
+  defaultColor: string;
   configPolyUrls: { config: AirspaceConfig; url: string }[];
 }
 
@@ -51,6 +52,7 @@ interface AirspaceDisplayState {
   sectors: {
     name: SectorName;
     isDisplayed: boolean;
+    color: string;
   }[];
 }
 

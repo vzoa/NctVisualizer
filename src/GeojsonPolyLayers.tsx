@@ -1,7 +1,7 @@
 import { AirspaceConfig, AppDisplayState, PolyDefinition, SectorName } from "./types";
 import { Component, createEffect, For, Show } from "solid-js";
 import { Layer } from "solid-map-gl";
-import { createStore, produce, reconcile } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 import { logIfDev } from "./lib/utils";
 
 interface GeojsonPolyLayersProps {
@@ -13,12 +13,18 @@ interface DisplayState {
   name: SectorName;
   isDisplayed: boolean;
   config: AirspaceConfig;
+  color: string;
 }
 
 const createStartingLayers = (allPolys: PolyDefinition[]): DisplayState[] =>
   allPolys.flatMap((p) =>
     p.polys.sectorConfigs.flatMap((s) =>
-      s.configPolyUrls.map((c) => ({ name: s.sectorName, config: c.config, isDisplayed: false }))
+      s.configPolyUrls.map((c) => ({
+        name: s.sectorName,
+        config: c.config,
+        isDisplayed: false,
+        color: s.defaultColor,
+      }))
     )
   );
 
@@ -41,8 +47,9 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
     setAllLayers(
       (layer) => displayMap.has(layer.name),
       produce((layer) => {
-        let displayLayer = displayMap.get(layer!.name)!;
-        layer!.isDisplayed = displayLayer.config === layer.config && displayLayer.isDisplayed;
+        let displayLayer = displayMap.get(layer.name)!;
+        layer.isDisplayed = displayLayer.config === layer.config && displayLayer.isDisplayed;
+        layer.color = displayLayer.color;
       })
     );
 
@@ -57,18 +64,19 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
             style={{
               source: `${layer.name}_${layer.config}`,
               type: "line",
-              paint: { "line-color": "hsl(100, 100%, 50%)", "line-width": 2 },
+              paint: { "line-color": layer.color, "line-width": 2 },
             }}
           />
-          {/*<Layer*/}
-          {/*    style={{*/}
-          {/*      type: "fill",*/}
-          {/*      paint: {*/}
-          {/*        "fill-color": "hsl(100, 100%, 50%)",*/}
-          {/*        "fill-opacity": 0.2,*/}
-          {/*      },*/}
-          {/*    }}*/}
-          {/*  />*/}
+          <Layer
+            style={{
+              source: `${layer.name}_${layer.config}`,
+              type: "fill",
+              paint: {
+                "fill-color": layer.color,
+                "fill-opacity": 0.2,
+              },
+            }}
+          />
         </Show>
       )}
     </For>
