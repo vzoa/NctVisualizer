@@ -59,21 +59,24 @@ export const SectorDisplayWithControls: Component<{
           each={props.store.areaDisplayStates.find((a) => a.name === props.airspaceGroup)?.sectors}
         >
           {(sector) => (
-            <Checkbox
-              label={sector.name}
-              checked={sector.isDisplayed}
-              onChange={(val) => {
-                props.setStore(
-                  "areaDisplayStates",
-                  (a) => a.name === props.airspaceGroup,
-                  "sectors",
-                  (s) => s.name === sector.name,
-                  "isDisplayed",
-                  val
-                );
-                props.setStore("updateCount", (prev) => prev + 1);
-              }}
-            />
+            <div class="flex justify-between">
+              <Checkbox
+                label={sector.name}
+                checked={sector.isDisplayed}
+                onChange={(val) => {
+                  props.setStore(
+                    "areaDisplayStates",
+                    (a) => a.name === props.airspaceGroup,
+                    "sectors",
+                    (s) => s.name === sector.name,
+                    "isDisplayed",
+                    val
+                  );
+                  props.setStore("updateCount", (prev) => prev + 1);
+                }}
+              />
+              <input type="color" value="#ffffff" class="w-6 h-6 mr-2" />
+            </div>
           )}
         </For>
       </div>
