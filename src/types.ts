@@ -18,6 +18,8 @@ interface MapStyle {
   disabled: boolean;
 }
 
+type AirspaceConfigDependentGroup = "RNO" | "SMF" | "BAY";
+
 type AirspaceConfig =
   | "RNON"
   | "RNOS"
@@ -29,7 +31,7 @@ type AirspaceConfig =
   | "OAKE"
   | "SJCE";
 
-type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Expo";
+type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Paradise";
 
 interface AirspaceConfigWithPolys {
   sectorName: SectorName;
@@ -37,11 +39,14 @@ interface AirspaceConfigWithPolys {
 }
 
 interface AreaPolys {
+  name: AirspaceConfigDependentGroup;
   defaultConfig: AirspaceConfig;
+  possibleConfigs: AirspaceConfig[];
   sectorConfigs: AirspaceConfigWithPolys[];
 }
 
 interface AirspaceDisplayState {
+  name: AirspaceConfigDependentGroup;
   selectedConfig: AirspaceConfig;
   sectors: {
     name: SectorName;
@@ -49,4 +54,25 @@ interface AirspaceDisplayState {
   }[];
 }
 
-export type { NctMap, NctMapWithSignal, MapStyle, AreaPolys, AirspaceConfig, AirspaceDisplayState };
+interface AppDisplayState {
+  updateCount: number;
+  areaDisplayStates: AirspaceDisplayState[];
+}
+
+interface PolyDefinition {
+  name: AirspaceConfigDependentGroup;
+  polys: AreaPolys;
+}
+
+export type {
+  NctMap,
+  NctMapWithSignal,
+  MapStyle,
+  AreaPolys,
+  AirspaceConfig,
+  AirspaceDisplayState,
+  AppDisplayState,
+  AirspaceConfigDependentGroup,
+  SectorName,
+  PolyDefinition,
+};
