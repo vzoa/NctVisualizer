@@ -8,7 +8,7 @@ import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS } from "./config";
 import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
 import { GeojsonPolySources } from "./GeojsonPolySources";
 import { NctBasemaps } from "./NctBasemaps";
-import { createStore, produce, SetStoreFunction } from "solid-js/store";
+import { createStore, produce } from "solid-js/store";
 import { SectorDisplayWithControls } from "./SectorDisplayWithControls";
 import { GeojsonPolyLayers } from "./GeojsonPolyLayers";
 import { logIfDev } from "./lib/utils";
@@ -54,7 +54,7 @@ const App: Component = () => {
 
   const altitudeHover = (evt: mapboxgl.MapMouseEvent) => {
     const features: MapboxGeoJSONFeature[] = evt.target.queryRenderedFeatures(evt.point, {
-      filter: ["==", ["geometry-type"], "Polygon"],
+      filter: ["all", ["==", ["geometry-type"], "Polygon"], ["has", "minAlt"], ["has", "maxAlt"]],
     });
     const fillLayers = getUniqueLayers(features.filter((f) => f.layer.type == "fill"));
     if (fillLayers.length > 0) {
