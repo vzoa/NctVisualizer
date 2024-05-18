@@ -1,9 +1,9 @@
 import { Component, createEffect, For, Show } from "solid-js";
-import { AirspaceConfig, AirspaceConfigDependentGroup, AppDisplayState } from "./types";
+import { AirspaceConfig, AirspaceConfigDependentGroup, AppDisplayState } from "../types";
 import { SetStoreFunction } from "solid-js/store";
 import { Select } from "@kobalte/core/select";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/Select";
-import { Checkbox } from "./components/Checkbox";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui-core/Select";
+import { Checkbox } from "./ui-core/Checkbox";
 
 export const SectorDisplayWithControls: Component<{
   airspaceGroup: AirspaceConfigDependentGroup;

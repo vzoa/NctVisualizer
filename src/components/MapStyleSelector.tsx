@@ -1,8 +1,8 @@
 import { Select } from "@kobalte/core/select";
 import { Accessor, Component, Setter } from "solid-js";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/Select";
-import { MAP_STYLES } from "./config";
-import { MapStyle } from "./types";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui-core/Select";
+import { MAP_STYLES } from "../config";
+import { MapStyle } from "../types";
 
 interface MapStyleSelectorProps {
   style: Accessor<MapStyle>;

@@ -1,6 +1,6 @@
 import { Layer, Source } from "solid-map-gl";
 import { Component, For, Show } from "solid-js";
-import { NctMapWithSignal } from "./types";
+import { NctMapWithSignal } from "../types";
 
 interface NctBasemapsProps {
   maps: NctMapWithSignal[];

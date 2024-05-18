@@ -4,11 +4,11 @@ import {
   PolyDefinition,
   SectorDisplayState,
   SectorName,
-} from "./types";
+} from "../types";
 import { Component, createEffect, For, Show } from "solid-js";
 import { Layer } from "solid-map-gl";
 import { createStore, produce } from "solid-js/store";
-import { logIfDev } from "./lib/utils";
+import { logIfDev } from "../lib/utils";
 
 interface GeojsonPolyLayersProps {
   displayStateStore: AppDisplayState;

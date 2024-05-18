@@ -6,11 +6,19 @@ import smfnElkhorn from "./polys/e-ca/smfn-elkhorn.geojson";
 import smfnParadise from "./polys/e-ca/smfn-paradise.geojson";
 import smfsElkhorn from "./polys/e-ca/smfs-elkhorn.geojson";
 import smfsParadise from "./polys/e-ca/smfs-paradise.geojson";
+import { Viewport } from "solid-map-gl";
 
 const DEFAULT_MAP_STYLE: MapStyle = {
   value: "mapbox://styles/mapbox/empty-v9",
   label: "Empty",
   disabled: false,
+};
+
+const DEFAULT_VIEWPORT: Viewport = {
+  center: [-121.4, 37.8],
+  zoom: 7,
+  pitch: 0,
+  bearing: 0,
 };
 
 const MAP_STYLES: MapStyle[] = [
@@ -98,20 +106,6 @@ const E_CA_POLYS: AreaPolys = {
   possibleConfigs: ["SMFS", "SMFN"],
   sectorConfigs: [
     {
-      sectorName: "Elkhorn",
-      defaultColor: "#50e991",
-      configPolyUrls: [
-        {
-          config: "SMFS",
-          url: smfsElkhorn,
-        },
-        {
-          config: "SMFN",
-          url: smfnElkhorn,
-        },
-      ],
-    },
-    {
       sectorName: "Paradise",
       defaultColor: "#e6d800",
       configPolyUrls: [
@@ -125,7 +119,21 @@ const E_CA_POLYS: AreaPolys = {
         },
       ],
     },
+    {
+      sectorName: "Elkhorn",
+      defaultColor: "#50e991",
+      configPolyUrls: [
+        {
+          config: "SMFS",
+          url: smfsElkhorn,
+        },
+        {
+          config: "SMFN",
+          url: smfnElkhorn,
+        },
+      ],
+    },
   ],
 };
 
-export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS, E_CA_POLYS };
+export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS, E_CA_POLYS, DEFAULT_VIEWPORT };

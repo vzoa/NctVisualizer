@@ -1,25 +1,25 @@
 import { Component, createEffect, createSignal, For, Show } from "solid-js";
 import MapGL, { Viewport } from "solid-map-gl";
-import { Checkbox } from "./components/Checkbox";
+import { Checkbox } from "./components/ui-core/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { MapStyleSelector } from "./MapStyleSelector";
+import { MapStyleSelector } from "./components/MapStyleSelector";
 import { AppDisplayState, NctMapWithSignal, PolyDefinition, PopupState } from "./types";
-import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS } from "./config";
+import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS, DEFAULT_VIEWPORT } from "./config";
 import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
-import { GeojsonPolySources } from "./GeojsonPolySources";
-import { NctBasemaps } from "./NctBasemaps";
+import { GeojsonPolySources } from "./components/GeojsonPolySources";
+import { NctBasemaps } from "./components/NctBasemaps";
 import { createStore, produce } from "solid-js/store";
-import { SectorDisplayWithControls } from "./SectorDisplayWithControls";
-import { GeojsonPolyLayers } from "./GeojsonPolyLayers";
+import { SectorDisplayWithControls } from "./components/SectorDisplayWithControls";
+import { GeojsonPolyLayers } from "./components/GeojsonPolyLayers";
 import { logIfDev } from "./lib/utils";
 import mapboxgl, { MapboxGeoJSONFeature } from "mapbox-gl";
-import { InfoPopup } from "./InfoPopup";
+import { InfoPopup } from "./components/InfoPopup";
+import { Section } from "./components/ui-core/Section";
+import { FooterDisclaimer } from "./components/FooterDisclaimer";
+import { MapReset } from "./components/MapReset";
 
 const App: Component = () => {
-  const [viewport, setViewport] = createSignal({
-    center: [-121.4, 37.8],
-    zoom: 7,
-  } as Viewport);
+  const [viewport, setViewport] = createSignal(DEFAULT_VIEWPORT);
 
   // Signal for map base style
   const [mapStyle, setMapStyle] = createSignal(DEFAULT_MAP_STYLE);
@@ -85,47 +85,49 @@ const App: Component = () => {
 
   return (
     <div class="flex h-screen">
-      <div class="flex flex-col bg-slate-900 p-4 space-y-4">
-        <h1 class="text-white text-2xl">NCT Visualizer</h1>
-        <div>
-          <h2 class="text-white text-xl mb-1">Style</h2>
-          <div class="flex flex-col space-y-1">
+      <div class="flex flex-col bg-slate-900 p-4 justify-between">
+        <div class="flex flex-col space-y-4 ">
+          <h1 class="text-white text-2xl">NCT Visualizer</h1>
+
+          <Section header="Style">
             <MapStyleSelector style={mapStyle} setStyle={setMapStyle} />
-          </div>
-        </div>
-        <div>
-          <h2 class="text-white text-xl mb-2">Base Map</h2>
-          <div class="flex flex-col space-y-1">
-            <For each={nctMaps}>
-              {(map, i) => (
-                <Checkbox label={map.name} checked={map.getter()} onChange={map.setter} />
-              )}
-            </For>
-          </div>
-        </div>
-        <div>
-          <h2 class="text-white text-xl">Sectors</h2>
+          </Section>
 
-          <SectorDisplayWithControls
-            airspaceGroup={"RNO"}
-            airspaceConfigOptions={["RNOS", "RNON"]}
-            store={allStore}
-            setStore={setAllStore}
-          />
+          <Section header="Base Maps">
+            <div class="flex flex-col space-y-1">
+              <For each={nctMaps}>
+                {(map, i) => (
+                  <Checkbox label={map.name} checked={map.getter()} onChange={map.setter} />
+                )}
+              </For>
+            </div>
+          </Section>
 
-          <SectorDisplayWithControls
-            airspaceGroup={"SMF"}
-            airspaceConfigOptions={["SMFS", "SMFN"]}
-            store={allStore}
-            setStore={setAllStore}
-          />
+          <Section header="Sectors">
+            <div class="flex flex-col space-y-4">
+              <SectorDisplayWithControls
+                airspaceGroup={"RNO"}
+                airspaceConfigOptions={["RNOS", "RNON"]}
+                store={allStore}
+                setStore={setAllStore}
+              />
+
+              <SectorDisplayWithControls
+                airspaceGroup={"SMF"}
+                airspaceConfigOptions={["SMFS", "SMFN"]}
+                store={allStore}
+                setStore={setAllStore}
+              />
+            </div>
+          </Section>
         </div>
+        <FooterDisclaimer />
       </div>
       <div class="grow relative">
         {/* Fake Popup until the Solid Map GL library fixes popups */}
-        <Show when={popup.vis}>
-          <InfoPopup popupState={popup} />
-        </Show>
+        <InfoPopup popupState={popup} />
+
+        <MapReset viewport={viewport()} setViewport={setViewport} />
 
         <MapGL
           options={{
@@ -134,7 +136,7 @@ const App: Component = () => {
             style: mapStyle().value,
           }}
           viewport={viewport()}
-          onViewportChange={(evt: Viewport) => setViewport(evt)}
+          onViewportChange={setViewport}
           class="h-full w-full"
           debug={import.meta.env.DEV}
           onMouseMove={altitudeHover}

@@ -2,7 +2,7 @@ import { Checkbox as CheckboxPrimitive, CheckboxRootProps } from "@kobalte/core/
 import { Check } from "lucide-solid";
 import { Component, Show, splitProps, ValidComponent } from "solid-js";
 import { PolymorphicProps } from "@kobalte/core";
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 
 interface StyledCheckboxProps extends CheckboxRootProps {
   label?: string;

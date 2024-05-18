@@ -9,7 +9,7 @@ import {
   SelectTriggerProps,
 } from "@kobalte/core/select";
 
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 
 const Select = SelectPrimitive;
 
