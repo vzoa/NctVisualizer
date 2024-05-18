@@ -15,7 +15,7 @@ import { logIfDev } from "./lib/utils";
 import mapboxgl, { MapboxGeoJSONFeature } from "mapbox-gl";
 import { InfoPopup } from "./components/InfoPopup";
 import { Section } from "./components/ui-core/Section";
-import { FooterDisclaimer } from "./components/FooterDisclaimer";
+import { Footer } from "./components/Footer";
 import { MapReset } from "./components/MapReset";
 
 const App: Component = () => {
@@ -121,7 +121,7 @@ const App: Component = () => {
             </div>
           </Section>
         </div>
-        <FooterDisclaimer />
+        <Footer />
       </div>
       <div class="grow relative">
         {/* Fake Popup until the Solid Map GL library fixes popups */}

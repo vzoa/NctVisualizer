@@ -23,7 +23,7 @@ export const MapReset: Component<MapResetProps> = (props) => {
         class="absolute top-5 right-5 z-50 text-black font-bold text-sm hover:cursor-pointer"
         onClick={() => props.setViewport(DEFAULT_VIEWPORT)}
       >
-        Reset Map View
+        RESET MAP VIEW
       </div>
     </Show>
   );
