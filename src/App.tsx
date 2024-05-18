@@ -1,16 +1,19 @@
-import { Component, createEffect, createSignal, For } from "solid-js";
+import { Component, createEffect, createSignal, For, Show } from "solid-js";
 import MapGL, { Viewport } from "solid-map-gl";
 import { Checkbox } from "./components/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./MapStyleSelector";
-import { AppDisplayState, NctMapWithSignal, PolyDefinition } from "./types";
+import { AppDisplayState, NctMapWithSignal, PolyDefinition, PopupState } from "./types";
 import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS } from "./config";
-import { createDefaultState, getGeojsonSources } from "./lib/geojson";
+import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
 import { GeojsonPolySources } from "./GeojsonPolySources";
 import { NctBasemaps } from "./NctBasemaps";
-import { createStore } from "solid-js/store";
+import { createStore, produce, SetStoreFunction } from "solid-js/store";
 import { SectorDisplayWithControls } from "./SectorDisplayWithControls";
 import { GeojsonPolyLayers } from "./GeojsonPolyLayers";
+import { logIfDev } from "./lib/utils";
+import mapboxgl, { MapboxGeoJSONFeature } from "mapbox-gl";
+import { InfoPopup } from "./InfoPopup";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal({
@@ -42,11 +45,41 @@ const App: Component = () => {
     areaDisplayStates: [createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
   });
 
+  const [popup, setPopup] = createStore<PopupState>({
+    hoveredPolys: [],
+    vis: false,
+  });
+
+  const [cursor, setCursor] = createSignal("grab");
+
+  const altitudeHover = (evt: mapboxgl.MapMouseEvent) => {
+    const features: MapboxGeoJSONFeature[] = evt.target.queryRenderedFeatures(evt.point, {
+      filter: ["==", ["geometry-type"], "Polygon"],
+    });
+    const fillLayers = getUniqueLayers(features.filter((f) => f.layer.type == "fill"));
+    if (fillLayers.length > 0) {
+      logIfDev(fillLayers);
+      setPopup(
+        produce((state) => {
+          state.vis = true;
+          state.hoveredPolys = fillLayers;
+        })
+      );
+      setCursor("crosshair");
+    } else {
+      setPopup("vis", false);
+      setCursor("grab");
+    }
+  };
+
   // Console debugging effects only created in DEV
   if (import.meta.env.DEV) {
     createEffect(() => {
       console.log("Update count", allStore.updateCount);
       console.log("Sectors display state", allStore.areaDisplayStates);
+    });
+    createEffect(() => {
+      console.log("Popup visibility state changed", popup.vis);
     });
   }
 
@@ -88,7 +121,12 @@ const App: Component = () => {
           />
         </div>
       </div>
-      <div class="grow">
+      <div class="grow relative">
+        {/* Fake Popup until the Solid Map GL library fixes popups */}
+        <Show when={popup.vis}>
+          <InfoPopup popupState={popup} />
+        </Show>
+
         <MapGL
           options={{
             accessToken:
@@ -99,7 +137,14 @@ const App: Component = () => {
           onViewportChange={(evt: Viewport) => setViewport(evt)}
           class="h-full w-full"
           debug={import.meta.env.DEV}
+          onMouseMove={altitudeHover}
+          cursorStyle={cursor()}
         >
+          {/*<Show when={popup.vis}>*/}
+          {/*  <Popup trackPointer options={{ offset: [0, -10], closeButton: false }}>*/}
+          {/*    {popup.content}*/}
+          {/*  </Popup>*/}
+          {/*</Show>*/}
           <NctBasemaps maps={nctMaps} />
           <GeojsonPolySources sources={sources} />
           <GeojsonPolyLayers displayStateStore={allStore} allPolys={polyDefinitions} />
