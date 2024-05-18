@@ -1,4 +1,5 @@
 import { Accessor, Setter } from "solid-js";
+import mapboxgl from "mapbox-gl";
 
 interface NctMap {
   name: string;
@@ -68,6 +69,11 @@ interface SectorDisplayState {
   color: string;
 }
 
+interface PopupState {
+  hoveredPolys: mapboxgl.MapboxGeoJSONFeature[];
+  vis: boolean;
+}
+
 export type {
   NctMap,
   NctMapWithSignal,
@@ -80,4 +86,5 @@ export type {
   SectorName,
   PolyDefinition,
   SectorDisplayState,
+  PopupState,
 };
