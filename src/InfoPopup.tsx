@@ -33,7 +33,9 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
                 {poly.source.split("_")[0]}
               </td>
               <td class="font-mono w-12 text-center">
-                {poly.properties?.minAlt.toString().padStart(3, "0")}
+                {poly.properties?.minAlt === 0
+                  ? "SFC"
+                  : poly.properties?.minAlt.toString().padStart(3, "0")}
               </td>
               <td class="font-mono w-12 text-center">
                 {poly.properties?.maxAlt.toString().padStart(3, "0")}

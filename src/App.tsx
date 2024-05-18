@@ -5,7 +5,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./MapStyleSelector";
 import { AppDisplayState, NctMapWithSignal, PolyDefinition, PopupState } from "./types";
 import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS } from "./config";
-import { createDefaultState, getGeojsonSources } from "./lib/geojson";
+import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
 import { GeojsonPolySources } from "./GeojsonPolySources";
 import { NctBasemaps } from "./NctBasemaps";
 import { createStore, produce, SetStoreFunction } from "solid-js/store";
@@ -56,8 +56,9 @@ const App: Component = () => {
     const features: MapboxGeoJSONFeature[] = evt.target.queryRenderedFeatures(evt.point, {
       filter: ["==", ["geometry-type"], "Polygon"],
     });
-    const fillLayers = features.filter((f) => f.layer.type == "fill");
+    const fillLayers = getUniqueLayers(features.filter((f) => f.layer.type == "fill"));
     if (fillLayers.length > 0) {
+      logIfDev(fillLayers);
       setPopup(
         produce((state) => {
           state.vis = true;
