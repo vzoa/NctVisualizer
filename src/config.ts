@@ -1,12 +1,32 @@
 import { MapStyle, NctMap, AreaPolys } from "./types";
+import { Viewport } from "solid-map-gl";
 
+// E-NV
 import nugget from "./polys/e-nv/nugget.geojson";
 import silver from "./polys/e-nv/silver.geojson";
+
+// E-CA
 import smfnElkhorn from "./polys/e-ca/smfn-elkhorn.geojson";
 import smfnParadise from "./polys/e-ca/smfn-paradise.geojson";
 import smfsElkhorn from "./polys/e-ca/smfs-elkhorn.geojson";
 import smfsParadise from "./polys/e-ca/smfs-paradise.geojson";
-import { Viewport } from "solid-map-gl";
+
+// A
+import morgan from "./polys/a/morgan.geojson";
+import seca from "./polys/a/seca.geojson";
+import sfowLicke from "./polys/a/sfow-licke.geojson";
+import sfowToga from "./polys/a/sfow-toga.geojson";
+
+// B
+
+// C
+import sfowValley from "./polys/c/sfow-valley.geojson";
+import sfowGrove from "./polys/c/sfow-grove.geojson";
+import sfowSunol from "./polys/c/sfow-sunol.geojson";
+
+// D
+import sfowRichmond from "./polys/d/sfow-richmond.geojson";
+import sfowSutro from "./polys/d/sfow-sutro.geojson";
 
 const DEFAULT_MAP_STYLE: MapStyle = {
   value: "mapbox://styles/mapbox/empty-v9",
@@ -136,4 +156,128 @@ const E_CA_POLYS: AreaPolys = {
   ],
 };
 
-export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, E_NV_POLYS, E_CA_POLYS, DEFAULT_VIEWPORT };
+const D_POLYS: AreaPolys = {
+  name: "D",
+  defaultConfig: "SFOW",
+  possibleConfigs: ["SFOW"],
+  sectorConfigs: [
+    {
+      sectorName: "Richmond",
+      defaultColor: "#fd9a5c",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowRichmond,
+        },
+      ],
+    },
+    {
+      sectorName: "Sutro",
+      defaultColor: "#5100e6",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowSutro,
+        },
+      ],
+    },
+  ],
+};
+
+const A_POLYS: AreaPolys = {
+  name: "A",
+  defaultConfig: "SFOW",
+  possibleConfigs: ["SFOW"],
+  sectorConfigs: [
+    {
+      sectorName: "Morgan",
+      defaultColor: "#621065",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: morgan,
+        },
+      ],
+    },
+    {
+      sectorName: "Seca",
+      defaultColor: "#31754f",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: seca,
+        },
+      ],
+    },
+    {
+      sectorName: "Toga",
+      defaultColor: "#674040",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowToga,
+        },
+      ],
+    },
+    {
+      sectorName: "Licke",
+      defaultColor: "#1abdaa",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowLicke,
+        },
+      ],
+    },
+  ],
+};
+
+const C_POLYS: AreaPolys = {
+  name: "C",
+  defaultConfig: "SFOW",
+  possibleConfigs: ["SFOW"],
+  sectorConfigs: [
+    {
+      sectorName: "Valley",
+      defaultColor: "#bca843",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowValley,
+        },
+      ],
+    },
+    {
+      sectorName: "Grove",
+      defaultColor: "#a30707",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowGrove,
+        },
+      ],
+    },
+    {
+      sectorName: "Sunol",
+      defaultColor: "#141955",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowSunol,
+        },
+      ],
+    },
+  ],
+};
+
+export {
+  DEFAULT_MAP_STYLE,
+  MAP_STYLES,
+  NCT_MAPS,
+  E_NV_POLYS,
+  E_CA_POLYS,
+  A_POLYS,
+  C_POLYS,
+  D_POLYS,
+  DEFAULT_VIEWPORT,
+};

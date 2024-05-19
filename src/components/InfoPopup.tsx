@@ -1,7 +1,8 @@
-import { Component, For, Show } from "solid-js";
+import { Component, createMemo, For, Show } from "solid-js";
 import { PopupState } from "../types";
 import { FillPaint } from "mapbox-gl";
 import colorString from "color-string";
+import { comparePolyAlts } from "../lib/geojson";
 
 interface InfoPopupProps {
   popupState: PopupState;
@@ -20,11 +21,13 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
     return colorString.to.hex([c.r * 255, c.g * 255, c.b * 255]);
   };
 
+  const sortedPolys = createMemo(() => props.popupState.hoveredPolys.toSorted(comparePolyAlts));
+
   return (
     <Show when={props.popupState.vis}>
       <div class="absolute top-5 left-5 w-48 bg-gray-200 bg-opacity-50 rounded border border-gray-800 p-1.5 z-50 items-center">
         <table>
-          <For each={props.popupState.hoveredPolys}>
+          <For each={sortedPolys()}>
             {(poly) => (
               <tr>
                 <td

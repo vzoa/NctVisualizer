@@ -4,7 +4,16 @@ import { Checkbox } from "./components/ui-core/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./components/MapStyleSelector";
 import { AppDisplayState, NctMapWithSignal, PolyDefinition, PopupState } from "./types";
-import { DEFAULT_MAP_STYLE, NCT_MAPS, E_NV_POLYS, E_CA_POLYS, DEFAULT_VIEWPORT } from "./config";
+import {
+  DEFAULT_MAP_STYLE,
+  NCT_MAPS,
+  E_NV_POLYS,
+  E_CA_POLYS,
+  DEFAULT_VIEWPORT,
+  A_POLYS,
+  C_POLYS,
+  D_POLYS,
+} from "./config";
 import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
 import { GeojsonPolySources } from "./components/GeojsonPolySources";
 import { NctBasemaps } from "./components/NctBasemaps";
@@ -37,12 +46,15 @@ const App: Component = () => {
   const polyDefinitions: PolyDefinition[] = [
     { name: "RNO", polys: E_NV_POLYS },
     { name: "SMF", polys: E_CA_POLYS },
+    { name: "A", polys: A_POLYS },
+    { name: "C", polys: C_POLYS },
+    { name: "D", polys: D_POLYS },
   ];
 
   const sources = polyDefinitions.flatMap((p) => getGeojsonSources(p.polys));
   const [allStore, setAllStore] = createStore<AppDisplayState>({
     updateCount: 0,
-    areaDisplayStates: [createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
+    areaDisplayStates: polyDefinitions.map((p) => createDefaultState(p.polys)), // createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
   });
 
   const [popup, setPopup] = createStore<PopupState>({
@@ -117,6 +129,30 @@ const App: Component = () => {
                 airspaceConfigOptions={["SMFS", "SMFN"]}
                 store={allStore}
                 setStore={setAllStore}
+              />
+
+              <SectorDisplayWithControls
+                airspaceGroup={"A"}
+                airspaceConfigOptions={["SFOW"]}
+                store={allStore}
+                setStore={setAllStore}
+                dependentOnConfig="SFOW"
+              />
+
+              <SectorDisplayWithControls
+                airspaceGroup={"C"}
+                airspaceConfigOptions={["SFOW"]}
+                store={allStore}
+                setStore={setAllStore}
+                dependentOnConfig="SFOW"
+              />
+
+              <SectorDisplayWithControls
+                airspaceGroup={"D"}
+                airspaceConfigOptions={["SFOW"]}
+                store={allStore}
+                setStore={setAllStore}
+                dependentOnConfig="SFOW"
               />
             </div>
           </Section>

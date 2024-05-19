@@ -19,7 +19,7 @@ interface MapStyle {
   disabled: boolean;
 }
 
-type AirspaceConfigDependentGroup = "RNO" | "SMF" | "BAY";
+type AirspaceConfigDependentGroup = "RNO" | "SMF" | "A" | "B" | "C" | "D";
 
 type AirspaceConfig =
   | "RNON"
@@ -32,7 +32,20 @@ type AirspaceConfig =
   | "OAKE"
   | "SJCE";
 
-type SectorName = "Nugget" | "Silver" | "Elkhorn" | "Paradise";
+type SectorName =
+  | "Nugget"
+  | "Silver"
+  | "Elkhorn"
+  | "Paradise"
+  | "Seca"
+  | "Morgan"
+  | "Licke"
+  | "Toga"
+  | "Richmond"
+  | "Sutro"
+  | "Grove"
+  | "Valley"
+  | "Sunol";
 
 interface AirspaceConfigWithPolys {
   sectorName: SectorName;
