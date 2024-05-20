@@ -1,5 +1,6 @@
-import { AirspaceDisplayState, AreaPolys } from "../types";
-import mapboxgl, { MapboxGeoJSONFeature } from "mapbox-gl";
+import { AirspaceDisplayState, AreaPolys, RgbaDecimal } from "../types";
+import mapboxgl, { FillPaint, MapboxGeoJSONFeature } from "mapbox-gl";
+import colorString from "color-string";
 
 const getGeojsonSources = (config: AreaPolys) =>
   config.sectorConfigs.flatMap((config) =>
@@ -45,4 +46,9 @@ const comparePolyAlts = (p1: mapboxgl.MapboxGeoJSONFeature, p2: mapboxgl.MapboxG
   return p1.properties?.minAlt - p2.properties?.minAlt;
 };
 
-export { getGeojsonSources, createDefaultState, getUniqueLayers, comparePolyAlts };
+const getFillColor = (paint: FillPaint): string => {
+  let c = paint["fill-color"] as RgbaDecimal;
+  return colorString.to.hex([c.r * 255, c.g * 255, c.b * 255]);
+};
+
+export { getGeojsonSources, createDefaultState, getUniqueLayers, comparePolyAlts, getFillColor };

@@ -93,6 +93,13 @@ interface PopupState {
   vis: boolean;
 }
 
+type RgbaDecimal = {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+};
+
 export type {
   NctMap,
   NctMapWithSignal,
@@ -106,4 +113,5 @@ export type {
   PolyDefinition,
   SectorDisplayState,
   PopupState,
+  RgbaDecimal,
 };
