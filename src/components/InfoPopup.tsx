@@ -1,8 +1,9 @@
-import { Component, createMemo, For, Show } from "solid-js";
+import { Component, createEffect, createMemo, For, Show } from "solid-js";
 import { PopupState } from "../types";
 import { FillPaint } from "mapbox-gl";
 import colorString from "color-string";
 import { comparePolyAlts } from "../lib/geojson";
+import { createMousePosition } from "@solid-primitives/mouse";
 
 interface InfoPopupProps {
   popupState: PopupState;
@@ -22,21 +23,26 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
   };
 
   const sortedPolys = createMemo(() => props.popupState.hoveredPolys.toSorted(comparePolyAlts));
+  const pos = createMousePosition(window);
 
   return (
     <Show when={props.popupState.vis}>
-      <div class="absolute top-5 left-5 w-48 bg-gray-200 bg-opacity-50 rounded border border-gray-800 p-1.5 z-50 items-center">
+      {/*<div class="absolute top-5 left-5 w-48 bg-gray-200 bg-opacity-50 rounded border border-gray-800 p-1.5 z-50 items-center">*/}
+      <div
+        class="bg-gray-200 bg-opacity-80 rounded border border-gray-800 p-1.5 z-50 items-center fixed"
+        style={{ top: `${pos.y + 5}px`, left: `${pos.x + 5}px` }}
+      >
         <table>
           <For each={sortedPolys()}>
             {(poly) => (
               <tr>
                 <td
-                  class="font-bold w-20"
+                  class="font-bold"
                   style={{ color: getFillColor(poly.layer.paint as FillPaint) }}
                 >
                   {poly.source.split("_")[0]}
                 </td>
-                <td class="font-mono w-12 text-center">
+                <td class="font-mono w-12 text-center ml-3">
                   {poly.properties?.minAlt === 0
                     ? "SFC"
                     : poly.properties?.minAlt.toString().padStart(3, "0")}
