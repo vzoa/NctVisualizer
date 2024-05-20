@@ -18,6 +18,12 @@ import sfowLicke from "./polys/a/sfow-licke.geojson";
 import sfowToga from "./polys/a/sfow-toga.geojson";
 
 // B
+import sfowBoulder from "./polys/b/sfow-boulder.geojson";
+import sfowCedar from "./polys/b/sfow-cedar.geojson";
+import sfowFoster from "./polys/b/sfow-foster.geojson";
+import sfowLaguna from "./polys/b/sfow-laguna.geojson";
+import sfowNiles from "./polys/b/sfow-niles.geojson";
+import sfowWoodside from "./polys/b/sfow-woodside.geojson";
 
 // C
 import sfowValley from "./polys/c/sfow-valley.geojson";
@@ -270,6 +276,74 @@ const C_POLYS: AreaPolys = {
   ],
 };
 
+const B_POLYS: AreaPolys = {
+  name: "B",
+  defaultConfig: "SFOW",
+  possibleConfigs: ["SFOW"],
+  sectorConfigs: [
+    {
+      sectorName: "Boulder",
+      defaultColor: "#7D7F7D",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowBoulder,
+        },
+      ],
+    },
+    {
+      sectorName: "Cedar",
+      defaultColor: "#FAD201",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowCedar,
+        },
+      ],
+    },
+    {
+      sectorName: "Foster",
+      defaultColor: "#721422",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowFoster,
+        },
+      ],
+    },
+    {
+      sectorName: "Laguna",
+      defaultColor: "#2271B3",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowLaguna,
+        },
+      ],
+    },
+    {
+      sectorName: "Niles",
+      defaultColor: "#317F43",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowNiles,
+        },
+      ],
+    },
+    {
+      sectorName: "Woodside",
+      defaultColor: "#1D1E33",
+      configPolyUrls: [
+        {
+          config: "SFOW",
+          url: sfowWoodside,
+        },
+      ],
+    },
+  ],
+};
+
 export {
   DEFAULT_MAP_STYLE,
   MAP_STYLES,
@@ -279,5 +353,6 @@ export {
   A_POLYS,
   C_POLYS,
   D_POLYS,
+  B_POLYS,
   DEFAULT_VIEWPORT,
 };

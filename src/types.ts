@@ -45,7 +45,13 @@ type SectorName =
   | "Sutro"
   | "Grove"
   | "Valley"
-  | "Sunol";
+  | "Sunol"
+  | "Boulder"
+  | "Cedar"
+  | "Foster"
+  | "Laguna"
+  | "Niles"
+  | "Woodside";
 
 interface AirspaceConfigWithPolys {
   sectorName: SectorName;

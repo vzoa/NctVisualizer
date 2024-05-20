@@ -13,6 +13,7 @@ import {
   A_POLYS,
   C_POLYS,
   D_POLYS,
+  B_POLYS,
 } from "./config";
 import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
 import { GeojsonPolySources } from "./components/GeojsonPolySources";
@@ -47,6 +48,7 @@ const App: Component = () => {
     { name: "RNO", polys: E_NV_POLYS },
     { name: "SMF", polys: E_CA_POLYS },
     { name: "A", polys: A_POLYS },
+    { name: "B", polys: B_POLYS },
     { name: "C", polys: C_POLYS },
     { name: "D", polys: D_POLYS },
   ];
@@ -133,6 +135,14 @@ const App: Component = () => {
 
               <SectorDisplayWithControls
                 airspaceGroup={"A"}
+                airspaceConfigOptions={["SFOW"]}
+                store={allStore}
+                setStore={setAllStore}
+                dependentOnConfig="SFOW"
+              />
+
+              <SectorDisplayWithControls
+                airspaceGroup={"B"}
                 airspaceConfigOptions={["SFOW"]}
                 store={allStore}
                 setStore={setAllStore}
