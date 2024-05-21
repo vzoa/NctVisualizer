@@ -177,8 +177,7 @@ const App: Component = () => {
 
         <MapGL
           options={{
-            accessToken:
-              "pk.eyJ1Ijoia2VuZ3JlaW0iLCJhIjoiY2x3MW15aGtzMGRuNzJrbHIybWNuM3BibyJ9.aMwzzc4Q0-bPHtWI-_MEQg",
+            accessToken: import.meta.env.VITE_MAPBOX_KEY,
             style: mapStyle().value,
           }}
           viewport={viewport()}
