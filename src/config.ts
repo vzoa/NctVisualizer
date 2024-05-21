@@ -16,6 +16,8 @@ import morgan from "./polys/a/morgan.geojson";
 import seca from "./polys/a/seca.geojson";
 import sfowLicke from "./polys/a/sfow-licke.geojson";
 import sfowToga from "./polys/a/sfow-toga.geojson";
+import sfoeLicke from "./polys/a/sfoe-licke.geojson";
+import sfoeToga from "./polys/a/sfoe-toga.geojson";
 
 // B
 import sfowBoulder from "./polys/b/sfow-boulder.geojson";
@@ -24,15 +26,26 @@ import sfowFoster from "./polys/b/sfow-foster.geojson";
 import sfowLaguna from "./polys/b/sfow-laguna.geojson";
 import sfowNiles from "./polys/b/sfow-niles.geojson";
 import sfowWoodside from "./polys/b/sfow-woodside.geojson";
+import sfoeBoulder from "./polys/b/sfoe-boulder.geojson";
+import sfoeCedar from "./polys/b/sfoe-cedar.geojson";
+import sfoeFoster from "./polys/b/sfoe-foster.geojson";
+import sfoeLaguna from "./polys/b/sfoe-laguna.geojson";
+import sfoeNiles from "./polys/b/sfoe-niles.geojson";
+import sfoeWoodside from "./polys/b/sfoe-woodside.geojson";
 
 // C
 import sfowValley from "./polys/c/sfow-valley.geojson";
 import sfowGrove from "./polys/c/sfow-grove.geojson";
 import sfowSunol from "./polys/c/sfow-sunol.geojson";
+import sfoeValley from "./polys/c/sfoe-valley.geojson";
+import sfoeGrove from "./polys/c/sfoe-grove.geojson";
+import sfoeSunol from "./polys/c/sfoe-sunol.geojson";
 
 // D
 import sfowRichmond from "./polys/d/sfow-richmond.geojson";
 import sfowSutro from "./polys/d/sfow-sutro.geojson";
+import sfoeRichmond from "./polys/d/sfoe-richmond.geojson";
+import sfoeSutro from "./polys/d/sfoe-sutro.geojson";
 
 const DEFAULT_MAP_STYLE: MapStyle = {
   value: "mapbox://styles/mapbox/empty-v9",
@@ -165,7 +178,7 @@ const E_CA_POLYS: AreaPolys = {
 const D_POLYS: AreaPolys = {
   name: "D",
   defaultConfig: "SFOW",
-  possibleConfigs: ["SFOW"],
+  possibleConfigs: ["SFOW", "SFOE"],
   sectorConfigs: [
     {
       sectorName: "Richmond",
@@ -174,6 +187,10 @@ const D_POLYS: AreaPolys = {
         {
           config: "SFOW",
           url: sfowRichmond,
+        },
+        {
+          config: "SFOE",
+          url: sfoeRichmond,
         },
       ],
     },
@@ -185,6 +202,10 @@ const D_POLYS: AreaPolys = {
           config: "SFOW",
           url: sfowSutro,
         },
+        {
+          config: "SFOE",
+          url: sfoeSutro,
+        },
       ],
     },
   ],
@@ -193,7 +214,7 @@ const D_POLYS: AreaPolys = {
 const A_POLYS: AreaPolys = {
   name: "A",
   defaultConfig: "SFOW",
-  possibleConfigs: ["SFOW"],
+  possibleConfigs: ["SFOW", "SFOE"],
   sectorConfigs: [
     {
       sectorName: "Morgan",
@@ -201,6 +222,10 @@ const A_POLYS: AreaPolys = {
       configPolyUrls: [
         {
           config: "SFOW",
+          url: morgan,
+        },
+        {
+          config: "SFOE",
           url: morgan,
         },
       ],
@@ -213,6 +238,10 @@ const A_POLYS: AreaPolys = {
           config: "SFOW",
           url: seca,
         },
+        {
+          config: "SFOE",
+          url: seca,
+        },
       ],
     },
     {
@@ -222,6 +251,10 @@ const A_POLYS: AreaPolys = {
         {
           config: "SFOW",
           url: sfowToga,
+        },
+        {
+          config: "SFOE",
+          url: sfoeToga,
         },
       ],
     },
@@ -233,6 +266,10 @@ const A_POLYS: AreaPolys = {
           config: "SFOW",
           url: sfowLicke,
         },
+        {
+          config: "SFOE",
+          url: sfoeLicke,
+        },
       ],
     },
   ],
@@ -241,7 +278,7 @@ const A_POLYS: AreaPolys = {
 const C_POLYS: AreaPolys = {
   name: "C",
   defaultConfig: "SFOW",
-  possibleConfigs: ["SFOW"],
+  possibleConfigs: ["SFOW", "SFOE"],
   sectorConfigs: [
     {
       sectorName: "Valley",
@@ -250,6 +287,10 @@ const C_POLYS: AreaPolys = {
         {
           config: "SFOW",
           url: sfowValley,
+        },
+        {
+          config: "SFOE",
+          url: sfoeValley,
         },
       ],
     },
@@ -261,6 +302,10 @@ const C_POLYS: AreaPolys = {
           config: "SFOW",
           url: sfowGrove,
         },
+        {
+          config: "SFOE",
+          url: sfoeGrove,
+        },
       ],
     },
     {
@@ -271,6 +316,10 @@ const C_POLYS: AreaPolys = {
           config: "SFOW",
           url: sfowSunol,
         },
+        {
+          config: "SFOE",
+          url: sfoeSunol,
+        },
       ],
     },
   ],
@@ -279,7 +328,7 @@ const C_POLYS: AreaPolys = {
 const B_POLYS: AreaPolys = {
   name: "B",
   defaultConfig: "SFOW",
-  possibleConfigs: ["SFOW"],
+  possibleConfigs: ["SFOW", "SFOE"],
   sectorConfigs: [
     {
       sectorName: "Boulder",
@@ -288,6 +337,10 @@ const B_POLYS: AreaPolys = {
         {
           config: "SFOW",
           url: sfowBoulder,
+        },
+        {
+          config: "SFOE",
+          url: sfoeBoulder,
         },
       ],
     },
@@ -299,6 +352,10 @@ const B_POLYS: AreaPolys = {
           config: "SFOW",
           url: sfowCedar,
         },
+        {
+          config: "SFOE",
+          url: sfoeCedar,
+        },
       ],
     },
     {
@@ -308,6 +365,10 @@ const B_POLYS: AreaPolys = {
         {
           config: "SFOW",
           url: sfowFoster,
+        },
+        {
+          config: "SFOE",
+          url: sfoeFoster,
         },
       ],
     },
@@ -319,6 +380,10 @@ const B_POLYS: AreaPolys = {
           config: "SFOW",
           url: sfowLaguna,
         },
+        {
+          config: "SFOE",
+          url: sfoeLaguna,
+        },
       ],
     },
     {
@@ -329,6 +394,10 @@ const B_POLYS: AreaPolys = {
           config: "SFOW",
           url: sfowNiles,
         },
+        {
+          config: "SFOE",
+          url: sfoeNiles,
+        },
       ],
     },
     {
@@ -338,6 +407,10 @@ const B_POLYS: AreaPolys = {
         {
           config: "SFOW",
           url: sfowWoodside,
+        },
+        {
+          config: "SFOE",
+          url: sfoeWoodside,
         },
       ],
     },
