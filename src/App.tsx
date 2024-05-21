@@ -3,7 +3,13 @@ import MapGL, { Viewport } from "solid-map-gl";
 import { Checkbox } from "./components/ui-core/Checkbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { MapStyleSelector } from "./components/MapStyleSelector";
-import { AppDisplayState, NctMapWithSignal, PolyDefinition, PopupState } from "./types";
+import {
+  AirspaceConfig,
+  AppDisplayState,
+  NctMapWithSignal,
+  PolyDefinition,
+  PopupState,
+} from "./types";
 import {
   DEFAULT_MAP_STYLE,
   NCT_MAPS,
@@ -27,6 +33,8 @@ import { InfoPopup } from "./components/InfoPopup";
 import { Section } from "./components/ui-core/Section";
 import { Footer } from "./components/Footer";
 import { MapReset } from "./components/MapReset";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui-core/Select";
+import { Select } from "@kobalte/core/select";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal(DEFAULT_VIEWPORT);
@@ -86,6 +94,8 @@ const App: Component = () => {
     }
   };
 
+  const [sfoConfig, setSfoConfig] = createSignal<AirspaceConfig>("SFOW");
+
   // Console debugging effects only created in DEV
   if (import.meta.env.DEV) {
     createEffect(() => {
@@ -133,36 +143,52 @@ const App: Component = () => {
                 setStore={setAllStore}
               />
 
+              {/*Temporary select for SFOW/SFOE*/}
+              <Select
+                options={["SFOW", "SFOE"]}
+                value={sfoConfig()}
+                onChange={(val) => setSfoConfig(val)}
+                disallowEmptySelection={true}
+                itemComponent={(props) => (
+                  <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+                )}
+              >
+                <SelectTrigger aria-label="Map Style" class="w-[180px]">
+                  <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+                </SelectTrigger>
+                <SelectContent />
+              </Select>
+
               <SectorDisplayWithControls
                 airspaceGroup={"A"}
-                airspaceConfigOptions={["SFOW"]}
+                airspaceConfigOptions={["SFOW", "SFOE"]}
                 store={allStore}
                 setStore={setAllStore}
-                dependentOnConfig="SFOW"
+                dependentOnConfig={sfoConfig()}
               />
 
               <SectorDisplayWithControls
                 airspaceGroup={"B"}
-                airspaceConfigOptions={["SFOW"]}
+                airspaceConfigOptions={["SFOW", "SFOE"]}
                 store={allStore}
                 setStore={setAllStore}
-                dependentOnConfig="SFOW"
+                dependentOnConfig={sfoConfig()}
               />
 
               <SectorDisplayWithControls
                 airspaceGroup={"C"}
-                airspaceConfigOptions={["SFOW"]}
+                airspaceConfigOptions={["SFOW", "SFOE"]}
                 store={allStore}
                 setStore={setAllStore}
-                dependentOnConfig="SFOW"
+                dependentOnConfig={sfoConfig()}
               />
 
               <SectorDisplayWithControls
                 airspaceGroup={"D"}
-                airspaceConfigOptions={["SFOW"]}
+                airspaceConfigOptions={["SFOW", "SFOE"]}
                 store={allStore}
                 setStore={setAllStore}
-                dependentOnConfig="SFOW"
+                dependentOnConfig={sfoConfig()}
               />
             </div>
           </Section>
