@@ -1,4 +1,4 @@
-import { MapStyle, NctMap, AreaPolys } from "./types";
+import { MapStyle, NctMap, AreaPolys, PolyDefinition } from "./types";
 import { Viewport } from "solid-map-gl";
 
 // E-NV
@@ -417,15 +417,13 @@ const B_POLYS: AreaPolys = {
   ],
 };
 
-export {
-  DEFAULT_MAP_STYLE,
-  MAP_STYLES,
-  NCT_MAPS,
-  E_NV_POLYS,
-  E_CA_POLYS,
-  A_POLYS,
-  C_POLYS,
-  D_POLYS,
-  B_POLYS,
-  DEFAULT_VIEWPORT,
-};
+const POLY_DEFINITIONS: PolyDefinition[] = [
+  { name: "RNO", polys: E_NV_POLYS },
+  { name: "SMF", polys: E_CA_POLYS },
+  { name: "A", polys: A_POLYS },
+  { name: "B", polys: B_POLYS },
+  { name: "C", polys: C_POLYS },
+  { name: "D", polys: D_POLYS },
+];
+
+export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, POLY_DEFINITIONS, DEFAULT_VIEWPORT };

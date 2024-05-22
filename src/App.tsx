@@ -1,40 +1,40 @@
+// SolidJs
 import { Component, createEffect, createSignal, For, Show } from "solid-js";
-import MapGL, { Viewport } from "solid-map-gl";
-import { Checkbox } from "./components/ui-core/Checkbox";
-import "mapbox-gl/dist/mapbox-gl.css";
-import { MapStyleSelector } from "./components/MapStyleSelector";
-import {
-  AirspaceConfig,
-  AppDisplayState,
-  NctMapWithSignal,
-  PolyDefinition,
-  PopupState,
-} from "./types";
-import {
-  DEFAULT_MAP_STYLE,
-  NCT_MAPS,
-  E_NV_POLYS,
-  E_CA_POLYS,
-  DEFAULT_VIEWPORT,
-  A_POLYS,
-  C_POLYS,
-  D_POLYS,
-  B_POLYS,
-} from "./config";
-import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
-import { GeojsonPolySources } from "./components/GeojsonPolySources";
-import { NctBasemaps } from "./components/NctBasemaps";
 import { createStore, produce } from "solid-js/store";
-import { SectorDisplayWithControls } from "./components/SectorDisplayWithControls";
-import { GeojsonPolyLayers } from "./components/GeojsonPolyLayers";
-import { logIfDev } from "./lib/utils";
+
+// Map
+import MapGL from "solid-map-gl";
 import mapboxgl, { MapboxGeoJSONFeature } from "mapbox-gl";
-import { InfoPopup } from "./components/InfoPopup";
-import { Section } from "./components/ui-core/Section";
-import { Footer } from "./components/Footer";
-import { MapReset } from "./components/MapReset";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui-core/Select";
+import "mapbox-gl/dist/mapbox-gl.css";
+
+// Components
+import {
+  Footer,
+  GeojsonPolyLayers,
+  GeojsonPolySources,
+  InfoPopup,
+  MapReset,
+  MapStyleSelector,
+  NctBasemaps,
+  SectorDisplayWithControls,
+} from "./components";
+import {
+  Checkbox,
+  Section,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./components/ui-core";
 import { Select } from "@kobalte/core/select";
+
+// Types/Utils
+import { AirspaceConfig, AppDisplayState, NctMapWithSignal, PopupState } from "./types";
+import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
+import { logIfDev } from "./lib/utils";
+
+// Config
+import { DEFAULT_MAP_STYLE, NCT_MAPS, POLY_DEFINITIONS, DEFAULT_VIEWPORT } from "./config";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal(DEFAULT_VIEWPORT);
@@ -52,19 +52,10 @@ const App: Component = () => {
     };
   });
 
-  const polyDefinitions: PolyDefinition[] = [
-    { name: "RNO", polys: E_NV_POLYS },
-    { name: "SMF", polys: E_CA_POLYS },
-    { name: "A", polys: A_POLYS },
-    { name: "B", polys: B_POLYS },
-    { name: "C", polys: C_POLYS },
-    { name: "D", polys: D_POLYS },
-  ];
-
-  const sources = polyDefinitions.flatMap((p) => getGeojsonSources(p.polys));
+  const sources = POLY_DEFINITIONS.flatMap((p) => getGeojsonSources(p.polys));
   const [allStore, setAllStore] = createStore<AppDisplayState>({
     updateCount: 0,
-    areaDisplayStates: polyDefinitions.map((p) => createDefaultState(p.polys)), // createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
+    areaDisplayStates: POLY_DEFINITIONS.map((p) => createDefaultState(p.polys)), // createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
   });
 
   const [popup, setPopup] = createStore<PopupState>({
@@ -220,7 +211,7 @@ const App: Component = () => {
           {/*</Show>*/}
           <NctBasemaps maps={nctMaps} />
           <GeojsonPolySources sources={sources} />
-          <GeojsonPolyLayers displayStateStore={allStore} allPolys={polyDefinitions} />
+          <GeojsonPolyLayers displayStateStore={allStore} allPolys={POLY_DEFINITIONS} />
         </MapGL>
       </div>
     </div>
