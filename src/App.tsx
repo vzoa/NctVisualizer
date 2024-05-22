@@ -4,7 +4,7 @@ import { createStore, produce } from "solid-js/store";
 
 // Map
 import MapGL from "solid-map-gl";
-import mapboxgl, { MapboxGeoJSONFeature } from "mapbox-gl";
+import mapboxgl, { FillPaint, MapboxGeoJSONFeature } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // Components
@@ -30,7 +30,12 @@ import { Select } from "@kobalte/core/select";
 
 // Types/Utils
 import { AirspaceConfig, AppDisplayState, NctMapWithSignal, PopupState } from "./types";
-import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
+import {
+  createDefaultState,
+  getGeojsonSources,
+  getUniqueLayers,
+  isTransparentFill,
+} from "./lib/geojson";
 import { logIfDev } from "./lib/utils";
 
 // Config
@@ -70,7 +75,10 @@ const App: Component = () => {
       filter: ["all", ["==", ["geometry-type"], "Polygon"], ["has", "minAlt"], ["has", "maxAlt"]],
     });
     const fillLayers = getUniqueLayers(features.filter((f) => f.layer.type == "fill"));
-    if (fillLayers.length > 0) {
+    if (
+      fillLayers.length > 0 &&
+      fillLayers.some((l) => !isTransparentFill(l.layer.paint as FillPaint))
+    ) {
       logIfDev(fillLayers);
       setPopup(
         produce((state) => {
