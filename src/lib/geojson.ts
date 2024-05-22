@@ -15,6 +15,7 @@ const createDefaultState = (config: AreaPolys): AirspaceDisplayState => ({
   selectedConfig: config.defaultConfig,
   sectors: config.sectorConfigs.map((c) => ({
     name: c.sectorName,
+    parentAreaName: config.name,
     isDisplayed: false,
     color: c.defaultColor,
   })),
@@ -48,7 +49,19 @@ const comparePolyAlts = (p1: mapboxgl.MapboxGeoJSONFeature, p2: mapboxgl.MapboxG
 
 const getFillColor = (paint: FillPaint): string => {
   let c = paint["fill-color"] as RgbaDecimal;
-  return colorString.to.hex([c.r * 255, c.g * 255, c.b * 255]);
+  return colorString.to.hex([c.r * 255, c.g * 255, c.b * 255, c.a]);
 };
 
-export { getGeojsonSources, createDefaultState, getUniqueLayers, comparePolyAlts, getFillColor };
+const isTransparentFill = (paint: FillPaint): boolean => {
+  let c = paint["fill-color"] as RgbaDecimal;
+  return c.a === 0;
+};
+
+export {
+  getGeojsonSources,
+  createDefaultState,
+  getUniqueLayers,
+  comparePolyAlts,
+  getFillColor,
+  isTransparentFill,
+};

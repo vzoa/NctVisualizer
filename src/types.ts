@@ -84,6 +84,7 @@ interface PolyDefinition {
 
 interface SectorDisplayState {
   name: SectorName;
+  parentAreaName: AirspaceConfigDependentGroup;
   isDisplayed: boolean;
   color: string;
 }
