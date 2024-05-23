@@ -4,7 +4,7 @@ import { createStore, produce } from "solid-js/store";
 
 // Map
 import MapGL from "solid-map-gl";
-import mapboxgl, { MapboxGeoJSONFeature } from "mapbox-gl";
+import mapboxgl, { FillPaint, MapboxGeoJSONFeature } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // Components
@@ -29,12 +29,24 @@ import {
 import { Select } from "@kobalte/core/select";
 
 // Types/Utils
-import { AirspaceConfig, AppDisplayState, NctMapWithSignal, PopupState } from "./types";
-import { createDefaultState, getGeojsonSources, getUniqueLayers } from "./lib/geojson";
+import { AirspaceConfig, AppDisplayState, NctMapWithSignal, PopupState, Settings } from "./types";
+import {
+  createDefaultState,
+  getGeojsonSources,
+  getUniqueLayers,
+  isTransparentFill,
+} from "./lib/geojson";
 import { logIfDev } from "./lib/utils";
 
 // Config
-import { DEFAULT_MAP_STYLE, NCT_MAPS, POLY_DEFINITIONS, DEFAULT_VIEWPORT } from "./config";
+import {
+  DEFAULT_MAP_STYLE,
+  NCT_MAPS,
+  POLY_DEFINITIONS,
+  DEFAULT_VIEWPORT,
+  DEFAULT_SETTINGS,
+} from "./config";
+import { makePersisted } from "@solid-primitives/storage";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal(DEFAULT_VIEWPORT);
@@ -53,10 +65,14 @@ const App: Component = () => {
   });
 
   const sources = POLY_DEFINITIONS.flatMap((p) => getGeojsonSources(p.polys));
-  const [allStore, setAllStore] = createStore<AppDisplayState>({
-    updateCount: 0,
-    areaDisplayStates: POLY_DEFINITIONS.map((p) => createDefaultState(p.polys)), // createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
-  });
+
+  const [allStore, setAllStore] = makePersisted(
+    createStore<AppDisplayState>({
+      updateCount: 0,
+      areaDisplayStates: POLY_DEFINITIONS.map((p) => createDefaultState(p.polys)), // createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
+    }),
+    { name: "currentDisplay" }
+  );
 
   const [popup, setPopup] = createStore<PopupState>({
     hoveredPolys: [],
@@ -65,25 +81,51 @@ const App: Component = () => {
 
   const [cursor, setCursor] = createSignal("grab");
 
+  const [settings, setSettings] = makePersisted(createStore<Settings>(DEFAULT_SETTINGS), {
+    name: "settings",
+  });
+
   const altitudeHover = (evt: mapboxgl.MapMouseEvent) => {
+    if (!evt.target.isStyleLoaded()) return;
     const features: MapboxGeoJSONFeature[] = evt.target.queryRenderedFeatures(evt.point, {
       filter: ["all", ["==", ["geometry-type"], "Polygon"], ["has", "minAlt"], ["has", "maxAlt"]],
     });
     const fillLayers = getUniqueLayers(features.filter((f) => f.layer.type == "fill"));
     if (fillLayers.length > 0) {
       logIfDev(fillLayers);
-      setPopup(
-        produce((state) => {
-          state.vis = true;
-          state.hoveredPolys = fillLayers;
-        })
+      let transparentLayers: mapboxgl.MapboxGeoJSONFeature[] = [];
+      let visibleLayers: mapboxgl.MapboxGeoJSONFeature[] = [];
+      fillLayers.forEach((l) =>
+        isTransparentFill(l.layer.paint as FillPaint)
+          ? transparentLayers.push(l)
+          : visibleLayers.push(l)
       );
-      setCursor("crosshair");
+      if (settings.popup.showUncheckedSectors) {
+        setPopup(
+          produce((state) => {
+            state.vis = settings.popup.uncheckedSectorsInVisibleSectorsOnly
+              ? visibleLayers.length > 0
+              : true;
+            state.hoveredPolys = fillLayers;
+          })
+        );
+      } else {
+        setPopup(
+          produce((state) => {
+            state.vis = visibleLayers.length > 0;
+            state.hoveredPolys = visibleLayers;
+          })
+        );
+      }
     } else {
       setPopup("vis", false);
-      setCursor("grab");
     }
   };
+
+  createEffect(() => {
+    if (popup.vis) setCursor("crosshair");
+    else setCursor("grab");
+  });
 
   const [sfoConfig, setSfoConfig] = createSignal<AirspaceConfig>("SFOW");
 
@@ -184,7 +226,7 @@ const App: Component = () => {
             </div>
           </Section>
         </div>
-        <Footer />
+        <Footer settings={settings} setSettings={setSettings} />
       </div>
       <div class="grow relative">
         {/* Fake Popup until the Solid Map GL library fixes popups */}

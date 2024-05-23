@@ -1,7 +1,7 @@
 import { Component, createMemo, createSignal, For, Show } from "solid-js";
 import { PopupState } from "../types";
 import { FillPaint } from "mapbox-gl";
-import { comparePolyAlts, getFillColor } from "../lib/geojson";
+import { comparePolyAlts, getFillColor, isTransparentFill } from "../lib/geojson";
 import { createMousePosition } from "@solid-primitives/mouse";
 import { cn } from "../lib/utils";
 import { ArrowLeftRight } from "lucide-solid";
@@ -11,7 +11,13 @@ interface InfoPopupProps {
 }
 
 export const InfoPopup: Component<InfoPopupProps> = (props) => {
-  const sortedPolys = createMemo(() => props.popupState.hoveredPolys.toSorted(comparePolyAlts));
+  const sortedPolys = createMemo(() =>
+    props.popupState.hoveredPolys.toSorted(comparePolyAlts).map((p) => ({
+      poly: p,
+      isTransparent: isTransparentFill(p.layer.paint as FillPaint),
+      color: getFillColor(p.layer.paint as FillPaint),
+    }))
+  );
   const pos = createMousePosition(window);
   const [followMouse, setFollowMouse] = createSignal(true);
   const styleOffset = createMemo(() =>
@@ -39,21 +45,29 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
         >
           <table>
             <For each={sortedPolys()}>
-              {(poly) => (
+              {(polyInfo) => (
                 <tr>
                   <td
-                    class={cn("font-bold", { "w-20": !followMouse() })}
-                    style={{ color: getFillColor(poly.layer.paint as FillPaint) }}
+                    class={cn(
+                      { "font-bold": !polyInfo.isTransparent },
+                      { italic: polyInfo.isTransparent },
+                      { "w-20": !followMouse() }
+                    )}
+                    style={{
+                      color: polyInfo.isTransparent
+                        ? "#4b5563" // Tailwind default gray-600
+                        : getFillColor(polyInfo.poly.layer.paint as FillPaint),
+                    }}
                   >
-                    {poly.source.split("_")[0]}
+                    {polyInfo.poly.source.split("_")[0]}
                   </td>
                   <td class="font-mono w-12 text-center ml-3">
-                    {poly.properties?.minAlt === 0
+                    {polyInfo.poly.properties?.minAlt === 0
                       ? "SFC"
-                      : poly.properties?.minAlt.toString().padStart(3, "0")}
+                      : polyInfo.poly.properties?.minAlt.toString().padStart(3, "0")}
                   </td>
                   <td class="font-mono w-12 text-center">
-                    {poly.properties?.maxAlt.toString().padStart(3, "0")}
+                    {polyInfo.poly.properties?.maxAlt.toString().padStart(3, "0")}
                   </td>
                 </tr>
               )}

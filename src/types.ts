@@ -84,6 +84,7 @@ interface PolyDefinition {
 
 interface SectorDisplayState {
   name: SectorName;
+  parentAreaName: AirspaceConfigDependentGroup;
   isDisplayed: boolean;
   color: string;
 }
@@ -100,6 +101,13 @@ type RgbaDecimal = {
   a: number;
 };
 
+interface Settings {
+  popup: {
+    showUncheckedSectors: boolean;
+    uncheckedSectorsInVisibleSectorsOnly: boolean;
+  };
+}
+
 export type {
   NctMap,
   NctMapWithSignal,
@@ -114,4 +122,5 @@ export type {
   SectorDisplayState,
   PopupState,
   RgbaDecimal,
+  Settings,
 };

@@ -19,17 +19,23 @@ interface DisplayState extends SectorDisplayState {
   config: AirspaceConfig;
 }
 
-interface TrackingDisplayState extends DisplayState {
+interface MapboxDisplayState extends SectorDisplayState {
+  config: AirspaceConfig;
   hasBeenModified: boolean;
+  isDisplayedTransparent: boolean;
+  isDisplayedColor: boolean;
 }
 
-const createStartingLayers = (allPolys: PolyDefinition[]): TrackingDisplayState[] =>
+const createStartingLayers = (allPolys: PolyDefinition[]): MapboxDisplayState[] =>
   allPolys.flatMap((p) =>
     p.polys.sectorConfigs.flatMap((s) =>
       s.configPolyUrls.map((c) => ({
         name: s.sectorName,
+        parentAreaName: p.name,
         config: c.config,
         isDisplayed: false,
+        isDisplayedTransparent: false,
+        isDisplayedColor: false,
         color: s.defaultColor,
         hasBeenModified: false,
       }))
@@ -56,11 +62,11 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
       (layer) => displayMap.has(layer.name),
       produce((layer) => {
         let displayLayer = displayMap.get(layer.name)!;
-        layer.hasBeenModified =
-          layer.hasBeenModified ||
-          (displayLayer.config === layer.config && displayLayer.isDisplayed != layer.isDisplayed);
-        layer.isDisplayed = displayLayer.config === layer.config && displayLayer.isDisplayed;
+        layer.hasBeenModified = layer.hasBeenModified || displayLayer.config === layer.config;
         layer.color = displayLayer.color;
+        layer.isDisplayedTransparent = displayLayer.config === layer.config;
+        layer.isDisplayedColor = layer.isDisplayedTransparent && displayLayer.isDisplayed;
+        layer.isDisplayed = layer.isDisplayedColor || layer.isDisplayedTransparent;
       })
     );
 
@@ -75,20 +81,35 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
             style={{
               source: `${layer.name}_${layer.config}`,
               type: "line",
-              paint: { "line-color": layer.color, "line-width": 2 },
+              paint: {
+                "line-color": layer.isDisplayedColor ? layer.color : "transparent",
+                "line-width": 2,
+                "line-color-transition": {
+                  duration: 0,
+                  delay: 0,
+                },
+              },
             }}
-            visible={layer.isDisplayed}
+            visible={layer.isDisplayedTransparent}
           />
           <Layer
             style={{
               source: `${layer.name}_${layer.config}`,
               type: "fill",
               paint: {
-                "fill-color": layer.color,
-                "fill-opacity": 0.2,
+                "fill-color": layer.isDisplayedColor ? layer.color : "transparent",
+                "fill-opacity": layer.isDisplayedColor ? 0.2 : 1.0,
+                "fill-color-transition": {
+                  duration: 0,
+                  delay: 0,
+                },
+                "fill-opacity-transition": {
+                  duration: 0,
+                  delay: 0,
+                },
               },
             }}
-            visible={layer.isDisplayed}
+            visible={layer.isDisplayedTransparent}
           />
         </Show>
       )}

@@ -2,8 +2,7 @@ import { Component, createEffect, For, Show } from "solid-js";
 import { AirspaceConfig, AirspaceConfigDependentGroup, AppDisplayState } from "../types";
 import { SetStoreFunction } from "solid-js/store";
 import { Select } from "@kobalte/core/select";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui-core/Select";
-import { Checkbox } from "./ui-core/Checkbox";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue, Checkbox } from "./ui-core";
 
 export const SectorDisplayWithControls: Component<{
   airspaceGroup: AirspaceConfigDependentGroup;

@@ -1,4 +1,4 @@
-import { MapStyle, NctMap, AreaPolys, PolyDefinition } from "./types";
+import { MapStyle, NctMap, AreaPolys, PolyDefinition, Settings } from "./types";
 import { Viewport } from "solid-map-gl";
 
 // E-NV
@@ -102,6 +102,10 @@ const NCT_MAPS: NctMap[] = [
 ];
 
 const BAY_DEFAULT_CONFIG = "SFOW";
+
+const DEFAULT_SETTINGS: Settings = {
+  popup: { showUncheckedSectors: false, uncheckedSectorsInVisibleSectorsOnly: false },
+};
 
 const E_NV_POLYS: AreaPolys = {
   name: "RNO",
@@ -426,4 +430,11 @@ const POLY_DEFINITIONS: PolyDefinition[] = [
   { name: "D", polys: D_POLYS },
 ];
 
-export { DEFAULT_MAP_STYLE, MAP_STYLES, NCT_MAPS, POLY_DEFINITIONS, DEFAULT_VIEWPORT };
+export {
+  DEFAULT_MAP_STYLE,
+  MAP_STYLES,
+  NCT_MAPS,
+  POLY_DEFINITIONS,
+  DEFAULT_VIEWPORT,
+  DEFAULT_SETTINGS,
+};
