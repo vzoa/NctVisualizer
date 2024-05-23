@@ -39,7 +39,13 @@ import {
 import { logIfDev } from "./lib/utils";
 
 // Config
-import { DEFAULT_MAP_STYLE, NCT_MAPS, POLY_DEFINITIONS, DEFAULT_VIEWPORT } from "./config";
+import {
+  DEFAULT_MAP_STYLE,
+  NCT_MAPS,
+  POLY_DEFINITIONS,
+  DEFAULT_VIEWPORT,
+  DEFAULT_SETTINGS,
+} from "./config";
 import { makePersisted } from "@solid-primitives/storage";
 
 const App: Component = () => {
@@ -75,12 +81,9 @@ const App: Component = () => {
 
   const [cursor, setCursor] = createSignal("grab");
 
-  const [settings, setSettings] = makePersisted(
-    createStore<Settings>({
-      popup: { showUncheckedSectors: true, uncheckedSectorsInVisibleSectorsOnly: false },
-    }),
-    { name: "settings" }
-  );
+  const [settings, setSettings] = makePersisted(createStore<Settings>(DEFAULT_SETTINGS), {
+    name: "settings",
+  });
 
   const altitudeHover = (evt: mapboxgl.MapMouseEvent) => {
     if (!evt.target.isStyleLoaded()) return;
