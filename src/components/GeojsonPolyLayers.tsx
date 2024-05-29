@@ -78,6 +78,7 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
       {(layer) => (
         <Show when={layer.hasBeenModified}>
           <Layer
+            id={`${layer.name}_${layer.config}_line`}
             style={{
               source: `${layer.name}_${layer.config}`,
               type: "line",
@@ -93,6 +94,7 @@ export const GeojsonPolyLayers: Component<GeojsonPolyLayersProps> = (props) => {
             visible={layer.isDisplayedTransparent}
           />
           <Layer
+            id={`${layer.name}_${layer.config}_fill`}
             style={{
               source: `${layer.name}_${layer.config}`,
               type: "fill",
