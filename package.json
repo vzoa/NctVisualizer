@@ -18,7 +18,7 @@
     "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.4.5",
-    "vite": "^5.2.11",
+    "vite": "^5.2.12",
     "vite-plugin-solid": "^2.10.2"
   },
   "dependencies": {
@@ -31,12 +31,12 @@
     "@types/mapbox-gl": "^3.1.0",
     "clsx": "^2.1.1",
     "color-string": "^1.9.1",
-    "lucide-solid": "^0.378.0",
-    "mapbox-gl": "^3.3.0",
+    "lucide-solid": "^0.379.0",
+    "mapbox-gl": "^3.4.0",
     "prettier": "^3.2.5",
     "solid-color": "^0.0.4",
     "solid-js": "^1.8.17",
-    "solid-map-gl": "^1.11.2",
+    "solid-map-gl": "^1.11.3",
     "tailwind-merge": "^2.3.0"
   }
 }
