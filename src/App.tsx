@@ -233,7 +233,7 @@ const App: Component = () => {
         {/* Fake Popup until the Solid Map GL library fixes popups */}
         <InfoPopup popupState={popup} settings={settings} />
 
-        <div class="absolute top-5 left-5 font-bold text-sm z-50 flex">
+        <div class="absolute top-5 left-5 z-50 flex">
           <SettingsDialog settings={settings} setSettings={setSettings} />
         </div>
 
