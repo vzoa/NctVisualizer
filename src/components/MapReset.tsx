@@ -1,4 +1,4 @@
-import { Component, createEffect, createMemo, createSignal, For, Setter, Show } from "solid-js";
+import { Component, createMemo, Setter, Show } from "solid-js";
 import { Viewport } from "solid-map-gl";
 import { DEFAULT_VIEWPORT } from "../config";
 
@@ -20,7 +20,7 @@ export const MapReset: Component<MapResetProps> = (props) => {
   return (
     <Show when={displayed()}>
       <div
-        class="absolute top-5 right-5 z-50 text-black font-bold text-sm hover:cursor-pointer"
+        class="absolute top-5 right-5 z-50 text-gray-700 font-bold text-sm hover:cursor-pointer border border-gray-400 rounded p-1 bg-white bg-opacity-50 hover:bg-gray-300 hover:bg-opacity-50 transition"
         onClick={() => props.setViewport(DEFAULT_VIEWPORT)}
       >
         RESET MAP VIEW

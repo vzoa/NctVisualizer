@@ -104,7 +104,11 @@ const NCT_MAPS: NctMap[] = [
 const BAY_DEFAULT_CONFIG = "SFOW";
 
 const DEFAULT_SETTINGS: Settings = {
-  popup: { showUncheckedSectors: false, uncheckedSectorsInVisibleSectorsOnly: false },
+  popup: {
+    showUncheckedSectors: false,
+    uncheckedSectorsInVisibleSectorsOnly: false,
+    followMouse: true,
+  },
 };
 
 const E_NV_POLYS: AreaPolys = {

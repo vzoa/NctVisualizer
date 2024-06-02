@@ -1,13 +1,13 @@
-import { Component, createMemo, createSignal, For, Show } from "solid-js";
-import { PopupState } from "../types";
+import { Component, createMemo, For, Show } from "solid-js";
+import { PopupState, Settings } from "../types";
 import { FillPaint } from "mapbox-gl";
 import { comparePolyAlts, getFillColor, isTransparentFill } from "../lib/geojson";
 import { createMousePosition } from "@solid-primitives/mouse";
 import { cn } from "../lib/utils";
-import { ArrowLeftRight } from "lucide-solid";
 
 interface InfoPopupProps {
   popupState: PopupState;
+  settings: Settings;
 }
 
 export const InfoPopup: Component<InfoPopupProps> = (props) => {
@@ -19,27 +19,18 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
     }))
   );
   const pos = createMousePosition(window);
-  const [followMouse, setFollowMouse] = createSignal(true);
   const styleOffset = createMemo(() =>
-    followMouse() ? { top: `${pos.y + 5}px`, left: `${pos.x + 5}px` } : {}
+    props.settings.popup.followMouse ? { top: `${pos.y + 5}px`, left: `${pos.x + 5}px` } : {}
   );
 
   return (
     <div>
-      <div
-        class="absolute top-5 left-5 text-black font-bold text-sm hover:cursor-pointer z-50 flex space-x-1 items-center"
-        onClick={() => setFollowMouse((prev) => !prev)}
-      >
-        <ArrowLeftRight />
-        <span>{followMouse() ? "ALTS FOLLOW MOUSE" : "ALTS IN CORNER"}</span>
-      </div>
       <Show when={props.popupState.vis}>
-        {/*<div class="absolute top-5 left-5 w-48 bg-gray-200 bg-opacity-50 rounded border border-gray-800 p-1.5 z-50 items-center">*/}
         <div
           class={cn(
             "bg-gray-200 bg-opacity-80 rounded border border-gray-800 p-1.5 z-50 items-center",
-            { fixed: followMouse() },
-            { "absolute top-14 left-5 w-48": !followMouse() }
+            { fixed: props.settings.popup.followMouse },
+            { "absolute top-14 left-5 w-48": !props.settings.popup.followMouse }
           )}
           style={styleOffset()}
         >
@@ -51,7 +42,7 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
                     class={cn(
                       { "font-bold": !polyInfo.isTransparent },
                       { italic: polyInfo.isTransparent },
-                      { "w-20": !followMouse() }
+                      { "w-20": !props.settings.popup.followMouse }
                     )}
                     style={{
                       color: polyInfo.isTransparent

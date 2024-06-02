@@ -47,6 +47,7 @@ import {
   DEFAULT_SETTINGS,
 } from "./config";
 import { makePersisted } from "@solid-primitives/storage";
+import { SettingsDialog } from "./components/Settings";
 
 const App: Component = () => {
   const [viewport, setViewport] = createSignal(DEFAULT_VIEWPORT);
@@ -226,11 +227,15 @@ const App: Component = () => {
             </div>
           </Section>
         </div>
-        <Footer settings={settings} setSettings={setSettings} />
+        <Footer />
       </div>
       <div class="grow relative">
         {/* Fake Popup until the Solid Map GL library fixes popups */}
-        <InfoPopup popupState={popup} />
+        <InfoPopup popupState={popup} settings={settings} />
+
+        <div class="absolute top-5 left-5 font-bold text-sm z-50 flex">
+          <SettingsDialog settings={settings} setSettings={setSettings} />
+        </div>
 
         <MapReset viewport={viewport()} setViewport={setViewport} />
 

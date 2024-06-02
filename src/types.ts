@@ -105,6 +105,7 @@ interface Settings {
   popup: {
     showUncheckedSectors: boolean;
     uncheckedSectorsInVisibleSectorsOnly: boolean;
+    followMouse: boolean;
   };
 }
 

@@ -1,55 +1,7 @@
-import { Component, Show } from "solid-js";
-import {
-  Checkbox,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui-core";
-import { Settings } from "../types";
-import { SetStoreFunction } from "solid-js/store";
+import { Component } from "solid-js";
 
-interface FooterProps {
-  settings: Settings;
-  setSettings: SetStoreFunction<Settings>;
-}
-
-export const Footer: Component<FooterProps> = (props) => (
+export const Footer: Component = () => (
   <div>
-    <Dialog>
-      <DialogTrigger class="text-white text-sm">Settings...</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
-          <DialogDescription>
-            Changes will be be saved automatically to your local browser.
-          </DialogDescription>
-        </DialogHeader>
-        <div class="flex items-center">
-          <Checkbox
-            checked={props.settings.popup.showUncheckedSectors}
-            onChange={(val) => props.setSettings("popup", "showUncheckedSectors", val)}
-          ></Checkbox>
-          <label class="ml-1.5">Popup: show information for non-displayed sectors</label>
-        </div>
-        <Show when={props.settings.popup.showUncheckedSectors}>
-          <div class="flex items-center">
-            <Checkbox
-              checked={props.settings.popup.uncheckedSectorsInVisibleSectorsOnly}
-              onChange={(val) =>
-                props.setSettings("popup", "uncheckedSectorsInVisibleSectorsOnly", val)
-              }
-            ></Checkbox>
-            <label class="ml-1.5">
-              Popup: show information for non-displayed sectors only when hovering visible sectors
-            </label>
-          </div>
-        </Show>
-        {/*Stuff here*/}
-      </DialogContent>
-    </Dialog>
     <div class="w-[180px] text-xs mt-2">
       <p class="text-slate-400">
         For simulation purposes only. Do not use for real world flight or ATC operations.
