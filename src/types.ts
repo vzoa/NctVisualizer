@@ -7,10 +7,14 @@ interface BaseMap {
   showDefault: boolean;
 }
 
-interface BaseMapState {
-  id: string;
+interface PersistedBaseMapState {
   baseMap: BaseMap;
   checked: boolean;
+}
+
+interface DisplayedBaseMapState {
+  id: string;
+  persistedState: PersistedBaseMapState;
   hasMounted: boolean;
 }
 
@@ -112,7 +116,8 @@ interface Settings {
 
 export type {
   BaseMap,
-  BaseMapState,
+  PersistedBaseMapState,
+  DisplayedBaseMapState,
   MapStyle,
   AreaPolys,
   AirspaceConfig,

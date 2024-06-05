@@ -1,9 +1,9 @@
 import { Layer, Source } from "solid-map-gl";
 import { Component, For, Show } from "solid-js";
-import { BaseMapState } from "../types";
+import { DisplayedBaseMapState, PersistedBaseMapState } from "../types";
 
 interface NctBasemapsProps {
-  mapsState: BaseMapState[];
+  mapsState: DisplayedBaseMapState[];
 }
 
 export const BaseMaps: Component<NctBasemapsProps> = (props) => {
@@ -11,20 +11,20 @@ export const BaseMaps: Component<NctBasemapsProps> = (props) => {
     <For each={props.mapsState}>
       {(map) => (
         <Source
-          id={map.baseMap.name}
+          id={map.persistedState.baseMap.name}
           source={{
             type: "vector",
-            url: map.baseMap.url,
+            url: map.persistedState.baseMap.url,
           }}
         >
           <Show when={map.hasMounted}>
             <Layer
-              id={map.baseMap.name}
+              id={map.persistedState.baseMap.name}
               style={{
-                "source-layer": map.baseMap.sourceLayer,
+                "source-layer": map.persistedState.baseMap.sourceLayer,
                 type: "line",
               }}
-              visible={map.checked}
+              visible={map.persistedState.checked}
             />
           </Show>
         </Source>

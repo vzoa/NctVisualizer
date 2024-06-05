@@ -31,7 +31,14 @@ import { Select } from "@kobalte/core/select";
 import { SettingsDialog } from "./components/Settings";
 
 // Types/Utils
-import { AirspaceConfig, AppDisplayState, BaseMapState, PopupState, Settings } from "./types";
+import {
+  AirspaceConfig,
+  AppDisplayState,
+  DisplayedBaseMapState,
+  PersistedBaseMapState,
+  PopupState,
+  Settings,
+} from "./types";
 import {
   createDefaultState,
   getGeojsonSources,
@@ -59,16 +66,18 @@ const App: Component = () => {
     name: "mapStyle",
   });
 
-  const [baseMaps, setBaseMaps] = makePersisted(
-    createStore<BaseMapState[]>(
+  const [persistedBaseMaps, setPersistedBaseMaps] = makePersisted(
+    createStore<PersistedBaseMapState[]>(
       BASE_MAPS.map((m) => ({
-        id: m.name,
         baseMap: m,
         checked: m.showDefault,
-        hasMounted: m.showDefault,
       }))
     ),
     { name: "baseMaps" }
+  );
+
+  const [baseMaps, setBaseMaps] = createStore<DisplayedBaseMapState[]>(
+    persistedBaseMaps.map((m) => ({ id: m.baseMap.name, persistedState: m, hasMounted: false }))
   );
 
   const sources = POLY_DEFINITIONS.flatMap((p) => getGeojsonSources(p.polys));
@@ -162,14 +171,14 @@ const App: Component = () => {
               <For each={baseMaps}>
                 {(m) => (
                   <Checkbox
-                    label={m.baseMap.name}
-                    checked={m.checked}
+                    label={m.persistedState.baseMap.name}
+                    checked={m.persistedState.checked}
                     onChange={(val) => {
                       setBaseMaps(
                         (m1) => m1.id === m.id,
                         produce((m2) => {
-                          m2.checked = val;
-                          m2.hasMounted = m2.hasMounted || m2.checked;
+                          m2.persistedState.checked = val;
+                          m2.hasMounted = m2.hasMounted || m2.persistedState.checked;
                         })
                       );
                     }}
