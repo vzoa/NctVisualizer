@@ -34,7 +34,7 @@ import { SettingsDialog } from "./components/Settings";
 import {
   AirspaceConfig,
   AppDisplayState,
-  DisplayedBaseMapState,
+  MountedBaseMapState,
   PersistedBaseMapState,
   PopupState,
   Settings,
@@ -69,6 +69,7 @@ const App: Component = () => {
   const [persistedBaseMaps, setPersistedBaseMaps] = makePersisted(
     createStore<PersistedBaseMapState[]>(
       BASE_MAPS.map((m) => ({
+        id: m.name,
         baseMap: m,
         checked: m.showDefault,
       }))
@@ -76,8 +77,8 @@ const App: Component = () => {
     { name: "baseMaps" }
   );
 
-  const [baseMaps, setBaseMaps] = createStore<DisplayedBaseMapState[]>(
-    persistedBaseMaps.map((m) => ({ id: m.baseMap.name, persistedState: m, hasMounted: false }))
+  const [mountedBaseMaps, setMountedBaseMaps] = createStore<MountedBaseMapState[]>(
+    persistedBaseMaps.map((m) => ({ id: m.baseMap.name, hasMounted: m.checked }))
   );
 
   const sources = POLY_DEFINITIONS.flatMap((p) => getGeojsonSources(p.polys));
@@ -168,17 +169,23 @@ const App: Component = () => {
 
           <Section header="Base Maps">
             <div class="flex flex-col space-y-1">
-              <For each={baseMaps}>
+              <For each={persistedBaseMaps}>
                 {(m) => (
                   <Checkbox
-                    label={m.persistedState.baseMap.name}
-                    checked={m.persistedState.checked}
+                    label={m.baseMap.name}
+                    checked={m.checked}
                     onChange={(val) => {
-                      setBaseMaps(
+                      setPersistedBaseMaps(
                         (m1) => m1.id === m.id,
                         produce((m2) => {
-                          m2.persistedState.checked = val;
-                          m2.hasMounted = m2.hasMounted || m2.persistedState.checked;
+                          m2.checked = val;
+                        })
+                      );
+                      let persisted = persistedBaseMaps.find((m1) => m1.id == m.id);
+                      setMountedBaseMaps(
+                        (m1) => m1.id === m.id,
+                        produce((m2) => {
+                          m2.hasMounted = m2.hasMounted || persisted!.checked;
                         })
                       );
                     }}
@@ -278,7 +285,7 @@ const App: Component = () => {
           onMouseMove={altitudeHover}
           cursorStyle={cursor()}
         >
-          <BaseMaps mapsState={baseMaps} />
+          <BaseMaps persistedMapsState={persistedBaseMaps} mountedMapsState={mountedBaseMaps} />
           <GeojsonPolySources sources={sources} />
           <GeojsonPolyLayers displayStateStore={allStore} allPolys={POLY_DEFINITIONS} />
         </MapGL>
