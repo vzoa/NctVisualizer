@@ -1,16 +1,17 @@
-import { Accessor, Setter } from "solid-js";
 import mapboxgl from "mapbox-gl";
 
-interface NctMap {
+interface BaseMap {
   name: string;
   url: string;
   sourceLayer: string;
   showDefault: boolean;
 }
 
-interface NctMapWithSignal extends NctMap {
-  getter: Accessor<boolean | undefined> | Accessor<boolean>;
-  setter: Setter<boolean | undefined> | Setter<boolean>;
+interface BaseMapState {
+  id: string;
+  baseMap: BaseMap;
+  checked: boolean;
+  hasMounted: boolean;
 }
 
 interface MapStyle {
@@ -110,8 +111,8 @@ interface Settings {
 }
 
 export type {
-  NctMap,
-  NctMapWithSignal,
+  BaseMap,
+  BaseMapState,
   MapStyle,
   AreaPolys,
   AirspaceConfig,

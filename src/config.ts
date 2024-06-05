@@ -1,4 +1,4 @@
-import { MapStyle, NctMap, AreaPolys, PolyDefinition, Settings } from "./types";
+import { MapStyle, BaseMap, AreaPolys, PolyDefinition, Settings } from "./types";
 import { Viewport } from "solid-map-gl";
 
 // E-NV
@@ -74,7 +74,7 @@ const MAP_STYLES: MapStyle[] = [
   },
 ];
 
-const NCT_MAPS: NctMap[] = [
+const BASE_MAPS: BaseMap[] = [
   {
     name: "LO W-S",
     url: "mapbox://kengreim.4525vady",
@@ -437,7 +437,7 @@ const POLY_DEFINITIONS: PolyDefinition[] = [
 export {
   DEFAULT_MAP_STYLE,
   MAP_STYLES,
-  NCT_MAPS,
+  BASE_MAPS,
   POLY_DEFINITIONS,
   DEFAULT_VIEWPORT,
   DEFAULT_SETTINGS,

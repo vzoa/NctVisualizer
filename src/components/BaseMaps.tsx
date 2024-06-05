@@ -1,29 +1,30 @@
 import { Layer, Source } from "solid-map-gl";
 import { Component, For, Show } from "solid-js";
-import { NctMapWithSignal } from "../types";
+import { BaseMapState } from "../types";
 
 interface NctBasemapsProps {
-  maps: NctMapWithSignal[];
+  mapsState: BaseMapState[];
 }
 
-export const NctBasemaps: Component<NctBasemapsProps> = (props) => {
+export const BaseMaps: Component<NctBasemapsProps> = (props) => {
   return (
-    <For each={props.maps}>
+    <For each={props.mapsState}>
       {(map) => (
         <Source
-          id={map.name}
+          id={map.baseMap.name}
           source={{
             type: "vector",
-            url: map.url,
+            url: map.baseMap.url,
           }}
         >
-          <Show when={typeof map.getter() != "undefined"}>
+          <Show when={map.hasMounted}>
             <Layer
+              id={map.baseMap.name}
               style={{
-                "source-layer": map.sourceLayer,
+                "source-layer": map.baseMap.sourceLayer,
                 type: "line",
               }}
-              visible={map.getter()}
+              visible={map.checked}
             />
           </Show>
         </Source>

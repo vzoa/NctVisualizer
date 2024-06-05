@@ -4,5 +4,5 @@ export * from "./GeojsonPolySources";
 export * from "./InfoPopup";
 export * from "./MapReset";
 export * from "./MapStyleSelector";
-export * from "./NctBasemaps";
+export * from "./BaseMaps";
 export * from "./SectorDisplayWithControls";

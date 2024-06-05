@@ -1,6 +1,7 @@
 // SolidJs
-import { Component, createEffect, createSignal, For, Show } from "solid-js";
+import { Component, createEffect, createSignal, For } from "solid-js";
 import { createStore, produce } from "solid-js/store";
+import { makePersisted } from "@solid-primitives/storage";
 
 // Map
 import MapGL from "solid-map-gl";
@@ -15,7 +16,7 @@ import {
   InfoPopup,
   MapReset,
   MapStyleSelector,
-  NctBasemaps,
+  BaseMaps,
   SectorDisplayWithControls,
 } from "./components";
 import {
@@ -27,9 +28,10 @@ import {
   SelectValue,
 } from "./components/ui-core";
 import { Select } from "@kobalte/core/select";
+import { SettingsDialog } from "./components/Settings";
 
 // Types/Utils
-import { AirspaceConfig, AppDisplayState, NctMapWithSignal, PopupState, Settings } from "./types";
+import { AirspaceConfig, AppDisplayState, BaseMapState, PopupState, Settings } from "./types";
 import {
   createDefaultState,
   getGeojsonSources,
@@ -41,36 +43,40 @@ import { logIfDev } from "./lib/utils";
 // Config
 import {
   DEFAULT_MAP_STYLE,
-  NCT_MAPS,
+  BASE_MAPS,
   POLY_DEFINITIONS,
   DEFAULT_VIEWPORT,
   DEFAULT_SETTINGS,
 } from "./config";
-import { makePersisted } from "@solid-primitives/storage";
-import { SettingsDialog } from "./components/Settings";
 
 const App: Component = () => {
-  const [viewport, setViewport] = createSignal(DEFAULT_VIEWPORT);
+  const [viewport, setViewport] = makePersisted(createSignal(DEFAULT_VIEWPORT), {
+    name: "viewport",
+  });
 
   // Signal for map base style
-  const [mapStyle, setMapStyle] = createSignal(DEFAULT_MAP_STYLE);
-
-  // Array of NCT base maps (LO W-S, Hi W-S, etc.) each with a signal for whether it's displayed
-  const nctMaps: NctMapWithSignal[] = NCT_MAPS.map((n) => {
-    const [getter, setter] = n.showDefault ? createSignal<boolean>(true) : createSignal<boolean>();
-    return {
-      ...n,
-      getter: getter,
-      setter: setter,
-    };
+  const [mapStyle, setMapStyle] = makePersisted(createSignal(DEFAULT_MAP_STYLE), {
+    name: "mapStyle",
   });
+
+  const [baseMaps, setBaseMaps] = makePersisted(
+    createStore<BaseMapState[]>(
+      BASE_MAPS.map((m) => ({
+        id: m.name,
+        baseMap: m,
+        checked: m.showDefault,
+        hasMounted: m.showDefault,
+      }))
+    ),
+    { name: "baseMaps" }
+  );
 
   const sources = POLY_DEFINITIONS.flatMap((p) => getGeojsonSources(p.polys));
 
   const [allStore, setAllStore] = makePersisted(
     createStore<AppDisplayState>({
       updateCount: 0,
-      areaDisplayStates: POLY_DEFINITIONS.map((p) => createDefaultState(p.polys)), // createDefaultState(E_NV_POLYS), createDefaultState(E_CA_POLYS)],
+      areaDisplayStates: POLY_DEFINITIONS.map((p) => createDefaultState(p.polys)),
     }),
     { name: "currentDisplay" }
   );
@@ -153,9 +159,21 @@ const App: Component = () => {
 
           <Section header="Base Maps">
             <div class="flex flex-col space-y-1">
-              <For each={nctMaps}>
-                {(map, i) => (
-                  <Checkbox label={map.name} checked={map.getter()} onChange={map.setter} />
+              <For each={baseMaps}>
+                {(m) => (
+                  <Checkbox
+                    label={m.baseMap.name}
+                    checked={m.checked}
+                    onChange={(val) => {
+                      setBaseMaps(
+                        (m1) => m1.id === m.id,
+                        produce((m2) => {
+                          m2.checked = val;
+                          m2.hasMounted = m2.hasMounted || m2.checked;
+                        })
+                      );
+                    }}
+                  />
                 )}
               </For>
             </div>
@@ -251,12 +269,7 @@ const App: Component = () => {
           onMouseMove={altitudeHover}
           cursorStyle={cursor()}
         >
-          {/*<Show when={popup.vis}>*/}
-          {/*  <Popup trackPointer options={{ offset: [0, -10], closeButton: false }}>*/}
-          {/*    {popup.content}*/}
-          {/*  </Popup>*/}
-          {/*</Show>*/}
-          <NctBasemaps maps={nctMaps} />
+          <BaseMaps mapsState={baseMaps} />
           <GeojsonPolySources sources={sources} />
           <GeojsonPolyLayers displayStateStore={allStore} allPolys={POLY_DEFINITIONS} />
         </MapGL>
