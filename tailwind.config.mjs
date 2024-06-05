@@ -1,7 +1,6 @@
-import type { Config } from "tailwindcss";
 import KobalteTailwindPlugin from "@kobalte/tailwindcss";
 
-const config: Config = {
+const config = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,css,md,mdx,html,json,scss}"],
   darkMode: "class",
   theme: {
