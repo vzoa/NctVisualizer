@@ -18,6 +18,8 @@ import sfowLicke from "./polys/a/sfow-licke.geojson";
 import sfowToga from "./polys/a/sfow-toga.geojson";
 import sfoeLicke from "./polys/a/sfoe-licke.geojson";
 import sfoeToga from "./polys/a/sfoe-toga.geojson";
+import sjceLicke from "./polys/a/sjce-licke.geojson";
+import sjceToga from "./polys/a/sjce-toga.geojson";
 
 // B
 import sfowBoulder from "./polys/b/sfow-boulder.geojson";
@@ -32,6 +34,12 @@ import sfoeFoster from "./polys/b/sfoe-foster.geojson";
 import sfoeLaguna from "./polys/b/sfoe-laguna.geojson";
 import sfoeNiles from "./polys/b/sfoe-niles.geojson";
 import sfoeWoodside from "./polys/b/sfoe-woodside.geojson";
+import sfo10Woodside from "./polys/b/sfo10-woodside.geojson";
+import sfo10Niles from "./polys/b/sfo10-niles.geojson";
+import sfo10Foster from "./polys/b/sfo10-foster.geojson";
+import sfo10Boulder from "./polys/b/sfo10-boulder.geojson";
+import oakeFoster from "./polys/b/oake-foster.geojson";
+import oakeBoulder from "./polys/b/oake-boulder.geojson";
 
 // C
 import sfowValley from "./polys/c/sfow-valley.geojson";
@@ -40,12 +48,16 @@ import sfowSunol from "./polys/c/sfow-sunol.geojson";
 import sfoeValley from "./polys/c/sfoe-valley.geojson";
 import sfoeGrove from "./polys/c/sfoe-grove.geojson";
 import sfoeSunol from "./polys/c/sfoe-sunol.geojson";
+import sfo10Grove from "./polys/c/sfo10-grove.geojson";
+import oakeGrove from "./polys/c/oake-grove.geojson";
 
 // D
 import sfowRichmond from "./polys/d/sfow-richmond.geojson";
 import sfowSutro from "./polys/d/sfow-sutro.geojson";
 import sfoeRichmond from "./polys/d/sfoe-richmond.geojson";
 import sfoeSutro from "./polys/d/sfoe-sutro.geojson";
+import oakeRichmond from "./polys/d/oake-richmond.geojson";
+import oakeSutro from "./polys/d/oake-sutro.geojson";
 
 const DEFAULT_MAP_STYLE: MapStyle = {
   value: "mapbox://styles/mapbox/empty-v9",
