@@ -61,7 +61,10 @@ type SectorName =
 interface AirspaceConfigWithPolys {
   sectorName: SectorName;
   defaultColor: string;
-  configPolyUrls: { config: AirspaceConfig; url: string }[];
+  configPolyUrls: {
+    configs: AirspaceConfig[];
+    url: string;
+  }[];
 }
 
 interface AreaPolys {

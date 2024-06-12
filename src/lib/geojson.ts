@@ -2,12 +2,14 @@ import { AirspaceDisplayState, AreaPolys, RgbaDecimal } from "../types";
 import mapboxgl, { FillPaint, MapboxGeoJSONFeature } from "mapbox-gl";
 import colorString from "color-string";
 
-const getGeojsonSources = (config: AreaPolys) =>
-  config.sectorConfigs.flatMap((config) =>
-    config.configPolyUrls.map((p) => ({
-      id: `${config.sectorName}_${p.config}`,
-      url: p.url,
-    }))
+const getGeojsonSources = (areaConfig: AreaPolys) =>
+  areaConfig.sectorConfigs.flatMap((sectorConfig) =>
+    sectorConfig.configPolyUrls.flatMap((polyDef) =>
+      polyDef.configs.map((config) => ({
+        id: `${sectorConfig.sectorName}_${config}`,
+        url: polyDef.url,
+      }))
+    )
   );
 
 const createDefaultState = (config: AreaPolys): AirspaceDisplayState => ({

@@ -27,18 +27,20 @@ interface MapboxDisplayState extends SectorDisplayState {
 }
 
 const createStartingLayers = (allPolys: PolyDefinition[]): MapboxDisplayState[] =>
-  allPolys.flatMap((p) =>
-    p.polys.sectorConfigs.flatMap((s) =>
-      s.configPolyUrls.map((c) => ({
-        name: s.sectorName,
-        parentAreaName: p.name,
-        config: c.config,
-        isDisplayed: false,
-        isDisplayedTransparent: false,
-        isDisplayedColor: false,
-        color: s.defaultColor,
-        hasBeenModified: false,
-      }))
+  allPolys.flatMap((polyDef) =>
+    polyDef.polys.sectorConfigs.flatMap((sector) =>
+      sector.configPolyUrls.flatMap((polyUrl) =>
+        polyUrl.configs.map((config) => ({
+          name: sector.sectorName,
+          parentAreaName: polyDef.name,
+          config: config,
+          isDisplayed: false,
+          isDisplayedTransparent: false,
+          isDisplayedColor: false,
+          color: sector.defaultColor,
+          hasBeenModified: false,
+        }))
+      )
     )
   );
 

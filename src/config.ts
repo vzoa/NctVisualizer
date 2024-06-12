@@ -133,11 +133,7 @@ const E_NV_POLYS: AreaPolys = {
       defaultColor: "#e60049",
       configPolyUrls: [
         {
-          config: "RNOS",
-          url: nugget,
-        },
-        {
-          config: "RNON",
+          configs: ["RNOS", "RNON"],
           url: nugget,
         },
       ],
@@ -147,11 +143,7 @@ const E_NV_POLYS: AreaPolys = {
       defaultColor: "#0bb4ff",
       configPolyUrls: [
         {
-          config: "RNOS",
-          url: silver,
-        },
-        {
-          config: "RNON",
+          configs: ["RNOS", "RNON"],
           url: silver,
         },
       ],
@@ -169,11 +161,11 @@ const E_CA_POLYS: AreaPolys = {
       defaultColor: "#e6d800",
       configPolyUrls: [
         {
-          config: "SMFS",
+          configs: ["SMFS"],
           url: smfsParadise,
         },
         {
-          config: "SMFN",
+          configs: ["SMFN"],
           url: smfnParadise,
         },
       ],
@@ -183,11 +175,11 @@ const E_CA_POLYS: AreaPolys = {
       defaultColor: "#50e991",
       configPolyUrls: [
         {
-          config: "SMFS",
+          configs: ["SMFS"],
           url: smfsElkhorn,
         },
         {
-          config: "SMFN",
+          configs: ["SMFN"],
           url: smfnElkhorn,
         },
       ],
@@ -198,19 +190,23 @@ const E_CA_POLYS: AreaPolys = {
 const D_POLYS: AreaPolys = {
   name: "D",
   defaultConfig: "SFOW",
-  possibleConfigs: ["SFOW", "SFOE"],
+  possibleConfigs: ["SFOW", "SFOE", "OAKE"],
   sectorConfigs: [
     {
       sectorName: "Richmond",
       defaultColor: "#fd9a5c",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW"],
           url: sfowRichmond,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeRichmond,
+        },
+        {
+          configs: ["OAKE"],
+          url: oakeRichmond,
         },
       ],
     },
@@ -219,12 +215,16 @@ const D_POLYS: AreaPolys = {
       defaultColor: "#5100e6",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW"],
           url: sfowSutro,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeSutro,
+        },
+        {
+          configs: ["OAKE"],
+          url: oakeSutro,
         },
       ],
     },
@@ -234,18 +234,14 @@ const D_POLYS: AreaPolys = {
 const A_POLYS: AreaPolys = {
   name: "A",
   defaultConfig: "SFOW",
-  possibleConfigs: ["SFOW", "SFOE"],
+  possibleConfigs: ["SFOW", "SFOE", "SJCE"],
   sectorConfigs: [
     {
       sectorName: "Morgan",
       defaultColor: "#621065",
       configPolyUrls: [
         {
-          config: "SFOW",
-          url: morgan,
-        },
-        {
-          config: "SFOE",
+          configs: ["SFOW", "SFOE"],
           url: morgan,
         },
       ],
@@ -255,11 +251,7 @@ const A_POLYS: AreaPolys = {
       defaultColor: "#31754f",
       configPolyUrls: [
         {
-          config: "SFOW",
-          url: seca,
-        },
-        {
-          config: "SFOE",
+          configs: ["SFOW", "SFOE"],
           url: seca,
         },
       ],
@@ -269,12 +261,16 @@ const A_POLYS: AreaPolys = {
       defaultColor: "#674040",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW"],
           url: sfowToga,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeToga,
+        },
+        {
+          configs: ["SJCE"],
+          url: sjceToga,
         },
       ],
     },
@@ -283,12 +279,16 @@ const A_POLYS: AreaPolys = {
       defaultColor: "#1abdaa",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW"],
           url: sfowLicke,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeLicke,
+        },
+        {
+          configs: ["SJCE"],
+          url: sjceLicke,
         },
       ],
     },
@@ -298,18 +298,18 @@ const A_POLYS: AreaPolys = {
 const C_POLYS: AreaPolys = {
   name: "C",
   defaultConfig: "SFOW",
-  possibleConfigs: ["SFOW", "SFOE"],
+  possibleConfigs: ["SFOW", "SFOE", "SFO10", "OAKE"],
   sectorConfigs: [
     {
       sectorName: "Valley",
       defaultColor: "#bca843",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW", "OAKE"],
           url: sfowValley,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE", "SFO10"],
           url: sfoeValley,
         },
       ],
@@ -319,12 +319,20 @@ const C_POLYS: AreaPolys = {
       defaultColor: "#a30707",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW"],
           url: sfowGrove,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeGrove,
+        },
+        {
+          configs: ["SFO10"],
+          url: sfo10Grove,
+        },
+        {
+          configs: ["OAKE"],
+          url: oakeGrove,
         },
       ],
     },
@@ -333,11 +341,11 @@ const C_POLYS: AreaPolys = {
       defaultColor: "#141955",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW", "OAKE"],
           url: sfowSunol,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE", "SFO10"],
           url: sfoeSunol,
         },
       ],
@@ -348,19 +356,27 @@ const C_POLYS: AreaPolys = {
 const B_POLYS: AreaPolys = {
   name: "B",
   defaultConfig: "SFOW",
-  possibleConfigs: ["SFOW", "SFOE"],
+  possibleConfigs: ["SFOW", "SFOE", "SFO10", "OAKE"],
   sectorConfigs: [
     {
       sectorName: "Boulder",
       defaultColor: "#7D7F7D",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW"],
           url: sfowBoulder,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeBoulder,
+        },
+        {
+          configs: ["SFO10"],
+          url: sfo10Boulder,
+        },
+        {
+          configs: ["OAKE"],
+          url: oakeBoulder,
         },
       ],
     },
@@ -369,11 +385,11 @@ const B_POLYS: AreaPolys = {
       defaultColor: "#FAD201",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW", "OAKE"],
           url: sfowCedar,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE", "SFO10"],
           url: sfoeCedar,
         },
       ],
@@ -383,12 +399,20 @@ const B_POLYS: AreaPolys = {
       defaultColor: "#721422",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW"],
           url: sfowFoster,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeFoster,
+        },
+        {
+          configs: ["SFO10"],
+          url: sfo10Foster,
+        },
+        {
+          configs: ["OAKE"],
+          url: oakeFoster,
         },
       ],
     },
@@ -397,11 +421,11 @@ const B_POLYS: AreaPolys = {
       defaultColor: "#2271B3",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW", "OAKE"],
           url: sfowLaguna,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE", "SFO10"],
           url: sfoeLaguna,
         },
       ],
@@ -411,12 +435,16 @@ const B_POLYS: AreaPolys = {
       defaultColor: "#317F43",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW", "OAKE"],
           url: sfowNiles,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeNiles,
+        },
+        {
+          configs: ["SFO10"],
+          url: sfo10Niles,
         },
       ],
     },
@@ -425,12 +453,16 @@ const B_POLYS: AreaPolys = {
       defaultColor: "#1D1E33",
       configPolyUrls: [
         {
-          config: "SFOW",
+          configs: ["SFOW", "OAKE"],
           url: sfowWoodside,
         },
         {
-          config: "SFOE",
+          configs: ["SFOE"],
           url: sfoeWoodside,
+        },
+        {
+          configs: ["SFO10"],
+          url: sfo10Woodside,
         },
       ],
     },
