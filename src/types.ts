@@ -37,6 +37,8 @@ type AirspaceConfig =
   | "OAKE"
   | "SJCE";
 
+type AirportConfig = "SFOW" | "SFO19" | "SFO10" | "OAKW" | "OAKE" | "SJCW" | "SJCE";
+
 type SectorName =
   | "Nugget"
   | "Silver"
@@ -133,4 +135,5 @@ export type {
   PopupState,
   RgbaDecimal,
   Settings,
+  AirportConfig,
 };

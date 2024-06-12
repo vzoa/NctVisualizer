@@ -3,6 +3,7 @@ import { AirspaceConfig, AirspaceConfigDependentGroup, AppDisplayState } from ".
 import { SetStoreFunction } from "solid-js/store";
 import { Select } from "@kobalte/core/select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue, Checkbox } from "./ui-core";
+import { cn } from "../lib/utils";
 
 export const SectorDisplayWithControls: Component<{
   airspaceGroup: AirspaceConfigDependentGroup;
@@ -27,6 +28,7 @@ export const SectorDisplayWithControls: Component<{
     <div>
       <Show when={typeof props.dependentOnConfig === "undefined"}>
         <Select
+          class="mt-4"
           options={props.airspaceConfigOptions}
           value={
             props.store.areaDisplayStates.find((a) => a.name === props.airspaceGroup)
@@ -53,7 +55,12 @@ export const SectorDisplayWithControls: Component<{
         </Select>
       </Show>
 
-      <div class="flex flex-col space-y-1 mt-2">
+      <div
+        class={cn([
+          "flex flex-col space-y-1 mt-4",
+          { "mt-2": typeof props.dependentOnConfig === "undefined" },
+        ])}
+      >
         <For
           each={props.store.areaDisplayStates.find((a) => a.name === props.airspaceGroup)?.sectors}
         >

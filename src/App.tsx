@@ -32,6 +32,7 @@ import { SettingsDialog } from "./components/Settings";
 
 // Types/Utils
 import {
+  AirportConfig,
   AirspaceConfig,
   AppDisplayState,
   MountedBaseMapState,
@@ -144,7 +145,10 @@ const App: Component = () => {
     else setCursor("grab");
   });
 
-  const [sfoConfig, setSfoConfig] = createSignal<AirspaceConfig>("SFOW");
+  const [bayConfig, setBayConfig] = createSignal<AirspaceConfig>("SFOW");
+  const [sfoConfig, setSfoConfig] = createSignal<AirportConfig>("SFOW");
+  const [oakConfig, setOakConfig] = createSignal<AirportConfig>("OAKW");
+  const [sjcConfig, setSjcConfig] = createSignal<AirportConfig>("SJCW");
 
   // Console debugging effects only created in DEV
   if (import.meta.env.DEV) {
@@ -195,23 +199,10 @@ const App: Component = () => {
             </div>
           </Section>
 
-          <Section header="Sectors">
-            <div class="flex flex-col space-y-4">
-              <SectorDisplayWithControls
-                airspaceGroup={"RNO"}
-                airspaceConfigOptions={["RNOS", "RNON"]}
-                store={allStore}
-                setStore={setAllStore}
-              />
-
-              <SectorDisplayWithControls
-                airspaceGroup={"SMF"}
-                airspaceConfigOptions={["SMFS", "SMFN"]}
-                store={allStore}
-                setStore={setAllStore}
-              />
-
-              {/*Temporary select for SFOW/SFOE*/}
+          <Section header="Sectors" class="space-y-2">
+            {/*Temporary select for SFOW/SFOE*/}
+            <div>
+              <span class="block text-md text-white mb-1">Bay Flow</span>
               <Select
                 options={["SFOW", "SFOE"]}
                 value={sfoConfig()}
@@ -226,39 +217,103 @@ const App: Component = () => {
                 </SelectTrigger>
                 <SelectContent />
               </Select>
-
-              <SectorDisplayWithControls
-                airspaceGroup={"A"}
-                airspaceConfigOptions={["SFOW", "SFOE"]}
-                store={allStore}
-                setStore={setAllStore}
-                dependentOnConfig={sfoConfig()}
-              />
-
-              <SectorDisplayWithControls
-                airspaceGroup={"B"}
-                airspaceConfigOptions={["SFOW", "SFOE"]}
-                store={allStore}
-                setStore={setAllStore}
-                dependentOnConfig={sfoConfig()}
-              />
-
-              <SectorDisplayWithControls
-                airspaceGroup={"C"}
-                airspaceConfigOptions={["SFOW", "SFOE"]}
-                store={allStore}
-                setStore={setAllStore}
-                dependentOnConfig={sfoConfig()}
-              />
-
-              <SectorDisplayWithControls
-                airspaceGroup={"D"}
-                airspaceConfigOptions={["SFOW", "SFOE"]}
-                store={allStore}
-                setStore={setAllStore}
-                dependentOnConfig={sfoConfig()}
-              />
             </div>
+
+            <div>
+              <span class="block text-md text-white mb-1">Airport Configs</span>
+              <div class="flex flex-col space-y-2">
+                <Select
+                  options={["SFOW", "SFOE"]}
+                  value={sfoConfig()}
+                  onChange={(val) => setSfoConfig(val)}
+                  disallowEmptySelection={true}
+                  itemComponent={(props) => (
+                    <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+                  )}
+                >
+                  <SelectTrigger aria-label="Map Style" class="w-[180px]">
+                    <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent />
+                </Select>
+
+                <Select
+                  options={["SFOW", "SFOE"]}
+                  value={sfoConfig()}
+                  onChange={(val) => setSfoConfig(val)}
+                  disallowEmptySelection={true}
+                  itemComponent={(props) => (
+                    <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+                  )}
+                >
+                  <SelectTrigger aria-label="Map Style" class="w-[180px]">
+                    <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent />
+                </Select>
+
+                <Select
+                  options={["SFOW", "SFOE"]}
+                  value={sfoConfig()}
+                  onChange={(val) => setSfoConfig(val)}
+                  disallowEmptySelection={true}
+                  itemComponent={(props) => (
+                    <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
+                  )}
+                >
+                  <SelectTrigger aria-label="Map Style" class="w-[180px]">
+                    <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent />
+                </Select>
+              </div>
+            </div>
+
+            <SectorDisplayWithControls
+              airspaceGroup={"A"}
+              airspaceConfigOptions={["SFOW", "SFOE"]}
+              store={allStore}
+              setStore={setAllStore}
+              dependentOnConfig={bayConfig()}
+            />
+
+            <SectorDisplayWithControls
+              airspaceGroup={"B"}
+              airspaceConfigOptions={["SFOW", "SFOE"]}
+              store={allStore}
+              setStore={setAllStore}
+              dependentOnConfig={bayConfig()}
+            />
+
+            <SectorDisplayWithControls
+              airspaceGroup={"C"}
+              airspaceConfigOptions={["SFOW", "SFOE"]}
+              store={allStore}
+              setStore={setAllStore}
+              dependentOnConfig={bayConfig()}
+            />
+
+            <SectorDisplayWithControls
+              airspaceGroup={"D"}
+              airspaceConfigOptions={["SFOW", "SFOE"]}
+              store={allStore}
+              setStore={setAllStore}
+              dependentOnConfig={bayConfig()}
+            />
+
+            <SectorDisplayWithControls
+              airspaceGroup={"RNO"}
+              airspaceConfigOptions={["RNOS", "RNON"]}
+              store={allStore}
+              setStore={setAllStore}
+            />
+
+            <SectorDisplayWithControls
+              airspaceGroup={"SMF"}
+              airspaceConfigOptions={["SMFS", "SMFN"]}
+              store={allStore}
+              setStore={setAllStore}
+            />
           </Section>
         </div>
         <Footer />
