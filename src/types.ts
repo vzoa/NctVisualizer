@@ -35,7 +35,8 @@ type AirspaceConfig =
   | "SFOE"
   | "SFO10"
   | "OAKE"
-  | "SJCE";
+  | "SJCE"
+  | "";
 
 type AirportConfig = "SFOW" | "SFO19" | "SFO10" | "OAKW" | "OAKE" | "SJCW" | "SJCE";
 

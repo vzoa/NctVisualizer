@@ -1,5 +1,5 @@
 // SolidJs
-import { Component, createEffect, createSignal, For } from "solid-js";
+import { Accessor, Component, createEffect, createMemo, createSignal, For } from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
 
@@ -145,10 +145,74 @@ const App: Component = () => {
     else setCursor("grab");
   });
 
-  const [bayConfig, setBayConfig] = createSignal<AirspaceConfig>("SFOW");
-  const [sfoConfig, setSfoConfig] = createSignal<AirportConfig>("SFOW");
-  const [oakConfig, setOakConfig] = createSignal<AirportConfig>("OAKW");
-  const [sjcConfig, setSjcConfig] = createSignal<AirportConfig>("SJCW");
+  const [bayConfig, setBayConfig] = makePersisted(createSignal<AirspaceConfig>("SFOW"), {
+    name: "bayConfig",
+  });
+  const [sfoConfig, setSfoConfig] = makePersisted(createSignal<AirportConfig>("SFOW"), {
+    name: "sfoConfig",
+  });
+  const [oakConfig, setOakConfig] = makePersisted(createSignal<AirportConfig>("OAKW"), {
+    name: "oakConfig",
+  });
+  const [sjcConfig, setSjcConfig] = makePersisted(createSignal<AirportConfig>("SJCW"), {
+    name: "sjcConfig",
+  });
+
+  const sfoOptions = createMemo(() => {
+    if (bayConfig() === "SFOW") {
+      return ["SFOW"];
+    } else if (bayConfig() === "SFOE") {
+      return ["SFO19", "SFO10"];
+    } else {
+      return [];
+    }
+  });
+
+  const oakOptions = createMemo(() => (bayConfig() === "SFOW" ? ["OAKW", "OAKE"] : ["OAKE"]));
+  const sjcOptions = createMemo(() => (bayConfig() === "SFOW" ? ["SJCW", "SJCE"] : ["SJCE"]));
+
+  const areaA: Accessor<AirspaceConfig> = createMemo(() => {
+    if (bayConfig() === "SFOW") {
+      return sjcConfig() === "SJCE" ? "SJCE" : "SFOW";
+    } else {
+      return bayConfig() === "SFOE" ? "SFOE" : "";
+    }
+  });
+
+  const areaBC: Accessor<AirspaceConfig> = createMemo(() => {
+    if (bayConfig() === "SFOW") {
+      return oakConfig() === "OAKE" ? "OAKE" : "SFOW";
+    } else {
+      if (bayConfig() === "SFOE") {
+        return sfoConfig() === "SFO19" ? "SFOE" : "SFO10";
+      } else {
+        return "";
+      }
+    }
+  });
+
+  const areaD: Accessor<AirspaceConfig> = createMemo(() => {
+    if (bayConfig() === "SFOW") {
+      return oakConfig() === "OAKE" ? "OAKE" : "SFOW";
+    } else {
+      return bayConfig() === "SFOE" ? "SFOE" : "";
+    }
+  });
+
+  createEffect(() => {
+    if (bayConfig() === "SFOW") {
+      setSfoConfig("SFOW");
+      // Currently not forcing because it conflicts with loading persisted settings.
+      //setOakConfig("OAKW");
+      //setSjcConfig("SJCW");
+    } else if (bayConfig() === "SFOE") {
+      if (sfoConfig() === "SFOW" || sfoConfig() == null) {
+        setSfoConfig("SFO19");
+      }
+      setOakConfig("OAKE");
+      setSjcConfig("SJCE");
+    }
+  });
 
   // Console debugging effects only created in DEV
   if (import.meta.env.DEV) {
@@ -205,8 +269,8 @@ const App: Component = () => {
               <span class="block text-md text-white mb-1">Bay Flow</span>
               <Select
                 options={["SFOW", "SFOE"]}
-                value={sfoConfig()}
-                onChange={(val) => setSfoConfig(val)}
+                value={bayConfig()}
+                onChange={(val) => setBayConfig(val)}
                 disallowEmptySelection={true}
                 itemComponent={(props) => (
                   <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
@@ -223,7 +287,7 @@ const App: Component = () => {
               <span class="block text-md text-white mb-1">Airport Configs</span>
               <div class="flex flex-col space-y-2">
                 <Select
-                  options={["SFOW", "SFOE"]}
+                  options={sfoOptions()}
                   value={sfoConfig()}
                   onChange={(val) => setSfoConfig(val)}
                   disallowEmptySelection={true}
@@ -238,9 +302,9 @@ const App: Component = () => {
                 </Select>
 
                 <Select
-                  options={["SFOW", "SFOE"]}
-                  value={sfoConfig()}
-                  onChange={(val) => setSfoConfig(val)}
+                  options={oakOptions()}
+                  value={oakConfig()}
+                  onChange={(val) => setOakConfig(val)}
                   disallowEmptySelection={true}
                   itemComponent={(props) => (
                     <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
@@ -253,9 +317,9 @@ const App: Component = () => {
                 </Select>
 
                 <Select
-                  options={["SFOW", "SFOE"]}
-                  value={sfoConfig()}
-                  onChange={(val) => setSfoConfig(val)}
+                  options={sjcOptions()}
+                  value={sjcConfig()}
+                  onChange={(val) => setSjcConfig(val)}
                   disallowEmptySelection={true}
                   itemComponent={(props) => (
                     <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
@@ -271,34 +335,30 @@ const App: Component = () => {
 
             <SectorDisplayWithControls
               airspaceGroup={"A"}
-              airspaceConfigOptions={["SFOW", "SFOE"]}
               store={allStore}
               setStore={setAllStore}
-              dependentOnConfig={bayConfig()}
+              dependentOnConfig={areaA()}
             />
 
             <SectorDisplayWithControls
               airspaceGroup={"B"}
-              airspaceConfigOptions={["SFOW", "SFOE"]}
               store={allStore}
               setStore={setAllStore}
-              dependentOnConfig={bayConfig()}
+              dependentOnConfig={areaBC()}
             />
 
             <SectorDisplayWithControls
               airspaceGroup={"C"}
-              airspaceConfigOptions={["SFOW", "SFOE"]}
               store={allStore}
               setStore={setAllStore}
-              dependentOnConfig={bayConfig()}
+              dependentOnConfig={areaBC()}
             />
 
             <SectorDisplayWithControls
               airspaceGroup={"D"}
-              airspaceConfigOptions={["SFOW", "SFOE"]}
               store={allStore}
               setStore={setAllStore}
-              dependentOnConfig={bayConfig()}
+              dependentOnConfig={areaD()}
             />
 
             <SectorDisplayWithControls
@@ -319,7 +379,6 @@ const App: Component = () => {
         <Footer />
       </div>
       <div class="grow relative">
-        {/* Fake Popup until the Solid Map GL library fixes popups */}
         <InfoPopup popupState={popup} settings={settings} />
 
         <div class="absolute top-5 left-5 z-50 flex">

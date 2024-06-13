@@ -241,7 +241,7 @@ const A_POLYS: AreaPolys = {
       defaultColor: "#621065",
       configPolyUrls: [
         {
-          configs: ["SFOW", "SFOE"],
+          configs: ["SFOW", "SFOE", "SJCE"],
           url: morgan,
         },
       ],
@@ -251,7 +251,7 @@ const A_POLYS: AreaPolys = {
       defaultColor: "#31754f",
       configPolyUrls: [
         {
-          configs: ["SFOW", "SFOE"],
+          configs: ["SFOW", "SFOE", "SJCE"],
           url: seca,
         },
       ],

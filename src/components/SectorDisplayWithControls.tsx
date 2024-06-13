@@ -5,13 +5,15 @@ import { Select } from "@kobalte/core/select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue, Checkbox } from "./ui-core";
 import { cn } from "../lib/utils";
 
-export const SectorDisplayWithControls: Component<{
+interface SectorDisplayWithControlsProps {
   airspaceGroup: AirspaceConfigDependentGroup;
-  airspaceConfigOptions: AirspaceConfig[];
+  airspaceConfigOptions?: AirspaceConfig[];
   store: AppDisplayState;
   setStore: SetStoreFunction<AppDisplayState>;
   dependentOnConfig?: AirspaceConfig;
-}> = (props) => {
+}
+
+export const SectorDisplayWithControls: Component<SectorDisplayWithControlsProps> = (props) => {
   // TODO -- need to make sure this works
   if (props.dependentOnConfig) {
     createEffect(() => {
@@ -29,7 +31,7 @@ export const SectorDisplayWithControls: Component<{
       <Show when={typeof props.dependentOnConfig === "undefined"}>
         <Select
           class="mt-4"
-          options={props.airspaceConfigOptions}
+          options={props.airspaceConfigOptions ?? []}
           value={
             props.store.areaDisplayStates.find((a) => a.name === props.airspaceGroup)
               ?.selectedConfig
