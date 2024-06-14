@@ -362,15 +362,15 @@ const App: Component = () => {
             />
 
             <SectorDisplayWithControls
-              airspaceGroup={"RNO"}
-              airspaceConfigOptions={["RNOS", "RNON"]}
+              airspaceGroup={"SMF"}
+              airspaceConfigOptions={["SMFS", "SMFN"]}
               store={allStore}
               setStore={setAllStore}
             />
 
             <SectorDisplayWithControls
-              airspaceGroup={"SMF"}
-              airspaceConfigOptions={["SMFS", "SMFN"]}
+              airspaceGroup={"RNO"}
+              airspaceConfigOptions={["RNOS", "RNON"]}
               store={allStore}
               setStore={setAllStore}
             />
