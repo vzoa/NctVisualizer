@@ -35,7 +35,10 @@ type AirspaceConfig =
   | "SFOE"
   | "SFO10"
   | "OAKE"
-  | "SJCE";
+  | "SJCE"
+  | "";
+
+type AirportConfig = "SFOW" | "SFO19" | "SFO10" | "OAKW" | "OAKE" | "SJCW" | "SJCE";
 
 type SectorName =
   | "Nugget"
@@ -61,7 +64,10 @@ type SectorName =
 interface AirspaceConfigWithPolys {
   sectorName: SectorName;
   defaultColor: string;
-  configPolyUrls: { config: AirspaceConfig; url: string }[];
+  configPolyUrls: {
+    configs: AirspaceConfig[];
+    url: string;
+  }[];
 }
 
 interface AreaPolys {
@@ -130,4 +136,5 @@ export type {
   PopupState,
   RgbaDecimal,
   Settings,
+  AirportConfig,
 };

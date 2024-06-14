@@ -3,14 +3,17 @@ import { AirspaceConfig, AirspaceConfigDependentGroup, AppDisplayState } from ".
 import { SetStoreFunction } from "solid-js/store";
 import { Select } from "@kobalte/core/select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue, Checkbox } from "./ui-core";
+import { cn } from "../lib/utils";
 
-export const SectorDisplayWithControls: Component<{
+interface SectorDisplayWithControlsProps {
   airspaceGroup: AirspaceConfigDependentGroup;
-  airspaceConfigOptions: AirspaceConfig[];
+  airspaceConfigOptions?: AirspaceConfig[];
   store: AppDisplayState;
   setStore: SetStoreFunction<AppDisplayState>;
   dependentOnConfig?: AirspaceConfig;
-}> = (props) => {
+}
+
+export const SectorDisplayWithControls: Component<SectorDisplayWithControlsProps> = (props) => {
   // TODO -- need to make sure this works
   if (props.dependentOnConfig) {
     createEffect(() => {
@@ -27,7 +30,8 @@ export const SectorDisplayWithControls: Component<{
     <div>
       <Show when={typeof props.dependentOnConfig === "undefined"}>
         <Select
-          options={props.airspaceConfigOptions}
+          class="mt-4"
+          options={props.airspaceConfigOptions ?? []}
           value={
             props.store.areaDisplayStates.find((a) => a.name === props.airspaceGroup)
               ?.selectedConfig
@@ -53,7 +57,12 @@ export const SectorDisplayWithControls: Component<{
         </Select>
       </Show>
 
-      <div class="flex flex-col space-y-1 mt-2">
+      <div
+        class={cn([
+          "flex flex-col space-y-1 mt-4",
+          { "mt-2": typeof props.dependentOnConfig === "undefined" },
+        ])}
+      >
         <For
           each={props.store.areaDisplayStates.find((a) => a.name === props.airspaceGroup)?.sectors}
         >
