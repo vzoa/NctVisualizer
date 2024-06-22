@@ -1,5 +1,14 @@
 // SolidJs
-import { Accessor, Component, createEffect, createMemo, createSignal, For } from "solid-js";
+import {
+  Accessor,
+  batch,
+  Component,
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  untrack,
+} from "solid-js";
 import { createStore, produce } from "solid-js/store";
 import { makePersisted } from "@solid-primitives/storage";
 
@@ -206,11 +215,13 @@ const App: Component = () => {
       //setOakConfig("OAKW");
       //setSjcConfig("SJCW");
     } else if (bayConfig() === "SFOE") {
-      if (sfoConfig() === "SFOW" || sfoConfig() == null) {
-        setSfoConfig("SFO19");
-      }
-      setOakConfig("OAKE");
-      setSjcConfig("SJCE");
+      batch(() => {
+        if (untrack(sfoConfig) === "SFOW" || untrack(sfoConfig) == null) {
+          setSfoConfig("SFO19");
+        }
+        setOakConfig("OAKE");
+        setSjcConfig("SJCE");
+      });
     }
   });
 
