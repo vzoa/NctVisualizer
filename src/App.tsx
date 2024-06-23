@@ -208,12 +208,16 @@ const App: Component = () => {
     }
   });
 
-  createEffect(() => {
+  createEffect((isInitialLoad) => {
     if (bayConfig() === "SFOW") {
-      setSfoConfig("SFOW");
-      // Currently not forcing because it conflicts with loading persisted settings.
-      //setOakConfig("OAKW");
-      //setSjcConfig("SJCW");
+      batch(() => {
+        setSfoConfig("SFOW");
+        // Need to track if initial state load from persistence. If so, don't trigger default reset
+        if (!isInitialLoad) {
+          setOakConfig("OAKW");
+          setSjcConfig("SJCW");
+        }
+      });
     } else if (bayConfig() === "SFOE") {
       batch(() => {
         if (untrack(sfoConfig) === "SFOW" || untrack(sfoConfig) == null) {
@@ -223,7 +227,8 @@ const App: Component = () => {
         setSjcConfig("SJCE");
       });
     }
-  });
+    return false;
+  }, true);
 
   // Console debugging effects only created in DEV
   if (import.meta.env.DEV) {
