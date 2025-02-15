@@ -44,9 +44,9 @@ const comparePolyAlts = (p1: mapboxgl.MapboxGeoJSONFeature, p2: mapboxgl.MapboxG
   if (typeof p1.properties?.minAlt !== "undefined" && typeof p2.properties?.minAlt === "undefined")
     return 1;
   if (p1.properties?.minAlt == p2.properties?.minAlt) {
-    return p1.properties?.maxAlt - p2.properties?.maxAlt;
+    return p2.properties?.maxAlt - p1.properties?.maxAlt;
   }
-  return p1.properties?.minAlt - p2.properties?.minAlt;
+  return p2.properties?.minAlt - p1.properties?.minAlt;
 };
 
 const getFillColor = (paint: FillPaint): string => {
