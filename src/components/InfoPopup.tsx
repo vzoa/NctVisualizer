@@ -28,7 +28,7 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
       <Show when={props.popupState.vis}>
         <div
           class={cn(
-            "bg-gray-200 bg-opacity-80 rounded border border-gray-800 p-1.5 z-50 items-center",
+            "bg-gray-200/80 rounded border border-gray-800 p-1.5 z-50 items-center",
             { fixed: props.settings.popup.followMouse },
             { "absolute top-14 left-5 w-48": !props.settings.popup.followMouse }
           )}
