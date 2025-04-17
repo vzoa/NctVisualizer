@@ -266,7 +266,7 @@ const App: Component = () => {
 
           <button
             onClick={() => setIsProceduresOpen((prev) => !prev)}
-            class="flex items-center justify-center w-36 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors"
+            class="flex items-center justify-center w-36 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors cursor-pointer"
             title="Airport Procedures"
           >
             Procedures
@@ -321,7 +321,7 @@ const App: Component = () => {
                   <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
                 )}
               >
-                <SelectTrigger aria-label="Map Style" class="w-[180px]">
+                <SelectTrigger aria-label="Map Style" class="w-[180px] cursor-pointer">
                   <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
                 </SelectTrigger>
                 <SelectContent />
@@ -344,7 +344,7 @@ const App: Component = () => {
                     <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
                   )}
                 >
-                  <SelectTrigger aria-label="Map Style" class="w-[180px]">
+                  <SelectTrigger aria-label="Map Style" class="w-[180px] cursor-pointer">
                     <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
                   </SelectTrigger>
                   <SelectContent />
@@ -363,7 +363,7 @@ const App: Component = () => {
                     <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
                   )}
                 >
-                  <SelectTrigger aria-label="Map Style" class="w-[180px]">
+                  <SelectTrigger aria-label="Map Style" class="w-[180px] cursor-pointer">
                     <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
                   </SelectTrigger>
                   <SelectContent />
@@ -382,7 +382,7 @@ const App: Component = () => {
                     <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
                   )}
                 >
-                  <SelectTrigger aria-label="Map Style" class="w-[180px]">
+                  <SelectTrigger aria-label="Map Style" class="w-[180px] cursor-pointer">
                     <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
                   </SelectTrigger>
                   <SelectContent />

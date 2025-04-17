@@ -52,7 +52,7 @@ export const SectorDisplayWithControls: Component<SectorDisplayWithControlsProps
             <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
           )}
         >
-          <SelectTrigger aria-label="Map Style" class="w-[180px]">
+          <SelectTrigger aria-label="Map Style" class="w-[180px] cursor-pointer">
             <SelectValue<string>>{(state) => state.selectedOption()}</SelectValue>
           </SelectTrigger>
           <SelectContent />
