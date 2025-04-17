@@ -23,7 +23,7 @@ const MapStyleSelector: Component<MapStyleSelectorProps> = (props) => {
         <SelectItem item={props.item}>{props.item.rawValue.label}</SelectItem>
       )}
     >
-      <SelectTrigger aria-label="Map Style" class="w-[180px]">
+      <SelectTrigger aria-label="Map Style" class="w-[180px] cursor-pointer">
         <SelectValue<MapStyle>>{(state) => state.selectedOption().label}</SelectValue>
       </SelectTrigger>
       <SelectContent />

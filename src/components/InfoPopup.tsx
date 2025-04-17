@@ -1,6 +1,5 @@
 import { Component, createMemo, For, Show } from "solid-js";
-import { PopupState, Settings } from "../types";
-import { FillPaint } from "mapbox-gl";
+import { PopupState, Settings, FillPaint} from "../types";
 import { comparePolyAlts, getFillColor, isTransparentFill } from "../lib/geojson";
 import { createMousePosition } from "@solid-primitives/mouse";
 import { cn } from "../lib/utils";
@@ -14,8 +13,8 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
   const sortedPolys = createMemo(() =>
     props.popupState.hoveredPolys.toSorted(comparePolyAlts).map((p) => ({
       poly: p,
-      isTransparent: isTransparentFill(p.layer.paint as FillPaint),
-      color: getFillColor(p.layer.paint as FillPaint),
+      isTransparent: isTransparentFill(p.layer?.paint as FillPaint),
+      color: getFillColor(p.layer?.paint as FillPaint),
     }))
   );
   const pos = createMousePosition(window);
@@ -47,10 +46,10 @@ export const InfoPopup: Component<InfoPopupProps> = (props) => {
                     style={{
                       color: polyInfo.isTransparent
                         ? "#4b5563" // Tailwind default gray-600
-                        : getFillColor(polyInfo.poly.layer.paint as FillPaint),
+                        : getFillColor(polyInfo.poly.layer?.paint as FillPaint),
                     }}
                   >
-                    {polyInfo.poly.source.split("_")[0]}
+                    {polyInfo.poly.source ? polyInfo.poly.source.split("_")[0] : "Unknown"}
                   </td>
                   <td class="font-mono w-12 text-center ml-3">
                     {polyInfo.poly.properties?.minAlt === 0

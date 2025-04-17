@@ -486,3 +486,5 @@ export {
   DEFAULT_VIEWPORT,
   DEFAULT_SETTINGS,
 };
+
+export const NAVDATA_API_URL = "https://navdata.oakartcc.org";
