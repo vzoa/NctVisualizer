@@ -19,7 +19,7 @@ interface SettingsProps {
 export const SettingsDialog: Component<SettingsProps> = (props) => {
   return (
     <Dialog>
-      <DialogTrigger class="font-bold text-sm border rounded border-slate-400 p-1 bg-slate-400 bg-opacity-50 hover:bg-opacity-60 transition text-gray-700">
+      <DialogTrigger class="font-bold text-sm border rounded border-slate-400 p-1 bg-slate-400/50 hover:bg-slate-400/60 transition text-gray-700 hover:cursor-pointer">
         Settings
       </DialogTrigger>
       <DialogContent>
