@@ -37,13 +37,15 @@ export const SectorDisplayWithControls: Component<SectorDisplayWithControlsProps
               ?.selectedConfig
           }
           onChange={(val) => {
-            props.setStore(
-              "areaDisplayStates",
-              (a) => a.name === props.airspaceGroup,
-              "selectedConfig",
-              val
-            );
-            props.setStore("updateCount", (prev) => prev + 1);
+            if (val) {
+              props.setStore(
+                "areaDisplayStates",
+                (a) => a.name === props.airspaceGroup,
+                "selectedConfig",
+                val
+              );
+              props.setStore("updateCount", (prev) => prev + 1);
+            }
           }}
           disallowEmptySelection={true}
           itemComponent={(props) => (

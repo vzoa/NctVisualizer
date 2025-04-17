@@ -1,4 +1,4 @@
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { FillLayerSpecification } from "mapbox-gl";
 
 interface BaseMap {
   name: string;
@@ -138,3 +138,36 @@ export type {
   Settings,
   AirportConfig,
 };
+
+export interface AirportSection {
+  id: string;
+  isExpanded: boolean;
+  arrivals: ArrivalProcedureDisplayState[];
+}
+
+export interface ArrivalProcedure {
+  arrivalIdentifier: string;
+  sequences: Sequence[];
+}
+
+export interface ArrivalProcedureDisplayState {
+  id: string;
+  isDisplayed: boolean;
+  procedure: ArrivalProcedure;
+}
+
+export interface Sequence {
+  transition?: string;
+  transitionType: "AreaNavigationCommon" | "AreaNavigationEnroute" | "AreaNavigationRunway";
+  points: Point[];
+}
+
+export interface Point {
+  identifier: string;
+  latitude: number;
+  longitude: number;
+  minAltitude?: string;
+  maxAltitude?: string;
+}
+
+export type FillPaint = FillLayerSpecification["paint"];

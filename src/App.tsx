@@ -14,7 +14,7 @@ import { makePersisted } from "@solid-primitives/storage";
 
 // Map
 import MapGL from "solid-map-gl";
-import mapboxgl, { FillPaint, MapboxGeoJSONFeature } from "mapbox-gl";
+import { GeoJSONFeature, MapMouseEvent } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 // Components
@@ -44,6 +44,8 @@ import {
   AirportConfig,
   AirspaceConfig,
   AppDisplayState,
+  ArrivalProcedure,
+  FillPaint,
   MountedBaseMapState,
   PersistedBaseMapState,
   PopupState,
@@ -65,6 +67,8 @@ import {
   DEFAULT_VIEWPORT,
   DEFAULT_SETTINGS,
 } from "./config";
+import { ArrivalPoints } from "./components/ArrivalPoints";
+import { ProceduresDialog } from "./components/ProceduresDialog";
 
 const App: Component = () => {
   const [viewport, setViewport] = makePersisted(createSignal(DEFAULT_VIEWPORT), {
@@ -112,18 +116,21 @@ const App: Component = () => {
     name: "settings",
   });
 
-  const altitudeHover = (evt: mapboxgl.MapMouseEvent) => {
+  const [displayedArrivals, setDisplayedArrivals] = createSignal<ArrivalProcedure[]>([]);
+  const [isProceduresOpen, setIsProceduresOpen] = createSignal(false);
+
+  const altitudeHover = (evt: MapMouseEvent) => {
     if (!evt.target.isStyleLoaded()) return;
-    const features: MapboxGeoJSONFeature[] = evt.target.queryRenderedFeatures(evt.point, {
+    const features: GeoJSONFeature[] = evt.target.queryRenderedFeatures(evt.point, {
       filter: ["all", ["==", ["geometry-type"], "Polygon"], ["has", "minAlt"], ["has", "maxAlt"]],
     });
-    const fillLayers = getUniqueLayers(features.filter((f) => f.layer.type == "fill"));
+    const fillLayers = getUniqueLayers(features.filter((f) => f.layer?.type == "fill"));
     if (fillLayers.length > 0) {
       logIfDev(fillLayers);
-      let transparentLayers: mapboxgl.MapboxGeoJSONFeature[] = [];
-      let visibleLayers: mapboxgl.MapboxGeoJSONFeature[] = [];
+      let transparentLayers: GeoJSONFeature[] = [];
+      let visibleLayers: GeoJSONFeature[] = [];
       fillLayers.forEach((l) =>
-        isTransparentFill(l.layer.paint as FillPaint)
+        isTransparentFill(l.layer?.paint as FillPaint)
           ? transparentLayers.push(l)
           : visibleLayers.push(l)
       );
@@ -153,6 +160,16 @@ const App: Component = () => {
     if (popup.vis) setCursor("crosshair");
     else setCursor("grab");
   });
+
+  const handleArrivalToggle = (arrival: ArrivalProcedure, isDisplayed: boolean) => {
+    setDisplayedArrivals((prev) => {
+      if (isDisplayed) {
+        return [...prev, arrival];
+      } else {
+        return prev.filter((a) => a.arrivalIdentifier !== arrival.arrivalIdentifier);
+      }
+    });
+  };
 
   const [bayConfig, setBayConfig] = makePersisted(createSignal<AirspaceConfig>("SFOW"), {
     name: "bayConfig",
@@ -247,6 +264,14 @@ const App: Component = () => {
         <div class="flex flex-col space-y-4">
           <h1 class="text-white text-2xl">NCT Visualizer</h1>
 
+          <button
+            onClick={() => setIsProceduresOpen((prev) => !prev)}
+            class="flex items-center justify-center w-36 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors"
+            title="Airport Procedures"
+          >
+            Procedures
+          </button>
+
           <Section header="Style">
             <MapStyleSelector style={mapStyle} setStyle={setMapStyle} />
           </Section>
@@ -286,7 +311,11 @@ const App: Component = () => {
               <Select
                 options={["SFOW", "SFOE"]}
                 value={bayConfig()}
-                onChange={(val) => setBayConfig(val)}
+                onChange={(val) => {
+                  if (val) {
+                    setBayConfig(val);
+                  }
+                }}
                 disallowEmptySelection={true}
                 itemComponent={(props) => (
                   <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
@@ -305,7 +334,11 @@ const App: Component = () => {
                 <Select
                   options={sfoOptions()}
                   value={sfoConfig()}
-                  onChange={(val) => setSfoConfig(val)}
+                  onChange={(val) => {
+                    if (val) {
+                      setSfoConfig(val);
+                    }
+                  }}
                   disallowEmptySelection={true}
                   itemComponent={(props) => (
                     <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
@@ -320,7 +353,11 @@ const App: Component = () => {
                 <Select
                   options={oakOptions()}
                   value={oakConfig()}
-                  onChange={(val) => setOakConfig(val)}
+                  onChange={(val) => {
+                    if (val) {
+                      setOakConfig(val);
+                    }
+                  }}
                   disallowEmptySelection={true}
                   itemComponent={(props) => (
                     <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
@@ -335,7 +372,11 @@ const App: Component = () => {
                 <Select
                   options={sjcOptions()}
                   value={sjcConfig()}
-                  onChange={(val) => setSjcConfig(val)}
+                  onChange={(val) => {
+                    if (val) {
+                      setSjcConfig(val);
+                    }
+                  }}
                   disallowEmptySelection={true}
                   itemComponent={(props) => (
                     <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
@@ -418,8 +459,15 @@ const App: Component = () => {
           <BaseMaps persistedMapsState={persistedBaseMaps} mountedMapsState={mountedBaseMaps} />
           <GeojsonPolySources sources={sources} />
           <GeojsonPolyLayers displayStateStore={allStore} allPolys={POLY_DEFINITIONS} />
+          <ArrivalPoints arrivals={displayedArrivals()} />
         </MapGL>
       </div>
+
+      <ProceduresDialog
+        isOpen={isProceduresOpen()}
+        onClose={() => setIsProceduresOpen(false)}
+        onArrivalToggle={handleArrivalToggle}
+      />
     </div>
   );
 };
