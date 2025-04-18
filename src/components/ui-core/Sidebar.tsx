@@ -35,7 +35,9 @@ export const Sidebar: Component<SidebarProps> = (props) => {
         </div>
 
         {/* Content */}
-        <div class="p-4 h-[calc(100%-4rem)] overflow-y-auto">{props.children}</div>
+        <div class="p-4 h-[calc(100%-4rem)] overflow-y-auto overscroll-contain">
+          {props.children}
+        </div>
       </div>
     </div>
   );
