@@ -260,7 +260,7 @@ const App: Component = () => {
 
   return (
     <div class="flex h-screen">
-      <div class="flex flex-col bg-slate-900 p-4 justify-between overflow-scroll overscroll-contain">
+      <div class="flex flex-col bg-slate-900 p-4 justify-between overflow-auto overscroll-contain">
         <div class="flex flex-col space-y-4">
           <h1 class="text-white text-2xl">NCT Visualizer</h1>
 
